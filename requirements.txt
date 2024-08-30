@@ -1,0 +1,4 @@
+requests
+pyyaml
+prettytable
+python-dotenv
