@@ -1,0 +1,39 @@
+- prompt: "Translate 'Good morning' to Spanish."
+  test: 1
+  category: "translation"
+  expected: "Buenos días"
+  temperature: 0.3
+  max_tokens: 10
+  language: "en"
+
+- prompt: "Summarize the key points of the Declaration of Independence."
+  test: 2
+  category: "summarization"
+  expected: "The Declaration of Independence asserts the right to self-government and lists grievances against the British Crown."
+  temperature: 0.5
+  max_tokens: 50
+  language: "en"
+
+- prompt: "What is the capital of France?"
+  test: 3
+  category: "general"
+  expected: "Paris"
+  temperature: 0.2
+  max_tokens: 5
+  language: "en"
+
+- prompt: "Explain the concept of Object-Oriented Programming."
+  test: 4
+  category: "general"
+  expected: "Object-Oriented Programming (OOP) is a programming paradigm based on the concept of objects, which can contain data and methods."
+  temperature: 0.6
+  max_tokens: 50
+  language: "en"
+
+- prompt: "Write a haiku about nature."
+  test: 5
+  category: "writer_assistant"
+  expected: "Whispers through the trees,\nNature's breath on morning dew,\nSunrise paints the sky."
+  temperature: 0.8
+  max_tokens: 20
+  language: "en"

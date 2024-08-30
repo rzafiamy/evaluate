@@ -2,3 +2,6 @@ requests
 pyyaml
 prettytable
 python-dotenv
+sentence-transformers
+scikit-learn
+jinja2
