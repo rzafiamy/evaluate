@@ -1,11 +1,16 @@
 import requests
 import time
+import random
+import string
+import uuid
 import csv
 from prettytable import PrettyTable
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from jinja2 import Environment, FileSystemLoader
 import os
+
+previous_random = set()
 
 class Evaluator:
     def __init__(self, config, dataset, output_folder):
@@ -51,6 +56,13 @@ class Evaluator:
         with open(html_file, 'w', encoding='utf-8') as file:
             file.write(html_content)
 
+    def generate_unique_random_string(self,existing_set, length=10):
+        while True:
+            random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+            if random_string not in existing_set:
+                existing_set.add(random_string)
+                return random_string
+
     def run(self, wait_time, similarity_threshold=0.75, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl'):
         table = PrettyTable(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
 
@@ -66,7 +78,15 @@ class Evaluator:
             # If there are predefined options in environment variables, use them
             extra_options = {}
             if self.config.options:
-                extra_options = self.config.options
+                # copy the options to extra_options
+                extra_options = self.config.options.copy()
+                
+                # Replace values in options containing "$random" with random and unique 10-character strings not in previous_random
+                for key, value in extra_options.items():
+                    unique_value = self.generate_unique_random_string(previous_random, length=10)
+                    extra_options[key] = value.replace("$random", unique_value)
+
+            print(extra_options)
 
             # Evaluate the prompt
             response = self.evaluate_prompt(prompt, {
