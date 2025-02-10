@@ -8,6 +8,9 @@ class Config:
         self.api_key = os.getenv('API_KEY')
         self.api_url = os.getenv('API_URL')
         self.provider = os.getenv('PROVIDER')
+        self.similarity_model = os.getenv('SIMILARITY_MODEL') if os.getenv('SIMILARITY_MODEL') else "all-mpnet-base-v2"
+        self.similarity_threshold = os.getenv('SIMILARITY_THRESHOLD') if os.getenv('SIMILARITY_THRESHOLD') else 0.30
+        
         self.options = self._load_options(os.getenv('LLM_OPTIONS'))
 
         if not self.api_url:

@@ -5,7 +5,7 @@
 ## ✨ Features
 
 - **YAML Dataset**: Uses a simple YAML dataset to feed prompts to the LLM via API requests 📥.
-- **Similarity Check**: Employs the `all-MiniLM-L6-v2` model to evaluate the similarity of responses to ensure they meet the expected criteria ✅.
+- **Similarity Check**: Employs the `all-MiniLM-L6-v2` model series to evaluate the similarity of responses to ensure they meet the expected criteria ✅.
 - **Reports**: Generates both CSV and HTML reports 📝 to summarize the results of the evaluation.
 - **PrettyTable Output**: Displays individual test results in the terminal using PrettyTable for a clear and organized view 📋.
 - **Configurable**: All API configurations and extra parameters are set in a `.env` file to keep them secure and private 🔐.
@@ -102,6 +102,9 @@ You can easily generate more complex synthetic datasets using tools like OpenAI'
 After running the evaluation, you'll find the results saved in the specified output folder as both CSV and HTML reports 📝. The individual test results will also be displayed on the screen in a table format using PrettyTable 🗒️.
 
 ![Preview](preview.png)
+
+
+The accuracy of the verdict depends on the similarity model chosen and the threshold value specified in the configuration file. These two factors significantly influence whether the verdict is correct or not.
 
 ## 💡 Best Practices
 

@@ -17,7 +17,7 @@ class Evaluator:
         self.config = config
         self.dataset = dataset
         self.output_folder = output_folder
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')  # Load a pre-trained embedding model
+        self.model = SentenceTransformer(self.config.similarity_model)  # Load a pre-trained embedding model
         self.results = []  # To store results for HTML and CSV report generation
 
     def evaluate_prompt(self, prompt, options):
@@ -75,7 +75,7 @@ class Evaluator:
                 existing_set.add(random_string)
                 return random_string
 
-    def run(self, wait_time, similarity_threshold=0.75, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl'):
+    def run(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl'):
         table = PrettyTable(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
 
         for entry in self.dataset:
@@ -106,7 +106,7 @@ class Evaluator:
             
             # Compute semantic similarity
             similarity = self.compute_similarity(expected, response_text)
-            success = similarity >= similarity_threshold
+            success = similarity >= float(self.config.similarity_threshold)
 
             # Display the result in the console
             table.add_row([test, prompt, category, expected[:10], response_text[:10], f"{similarity:.2f}", success])

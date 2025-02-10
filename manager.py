@@ -28,8 +28,15 @@ def main():
     # Create an evaluator instance
     evaluator = Evaluator(config, dataset, args.output)
 
+    # Extract base name from dataset file
+    filebase = os.path.splitext(os.path.basename(args.dataset))[0]
+
+    # Define output filenames
+    csv_file = f"{filebase}.csv"
+    html_file =  f"{filebase}.html"
+
     # Execute evaluation
-    evaluator.run(args.wait_time)
+    evaluator.run(args.wait_time, csv_file=csv_file, html_file=html_file)
 
 if __name__ == "__main__":
     main()
