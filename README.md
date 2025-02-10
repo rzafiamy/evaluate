@@ -5,7 +5,7 @@
 ## ✨ Features
 
 - **YAML Dataset**: Uses a simple YAML dataset to feed prompts to the LLM via API requests 📥.
-- **Similarity Check**: Employs the `all-MiniLM-L6-v2` model series to evaluate the similarity of responses to ensure they meet the expected criteria ✅.
+- **Similarity Check**: Employs embbeding models like `all-MiniLM-L6-v2` model series to evaluate the similarity of responses to ensure they meet the expected criteria ✅. You can use other embedding models as needed based on your requirements.
 - **Reports**: Generates both CSV and HTML reports 📝 to summarize the results of the evaluation.
 - **PrettyTable Output**: Displays individual test results in the terminal using PrettyTable for a clear and organized view 📋.
 - **Configurable**: All API configurations and extra parameters are set in a `.env` file to keep them secure and private 🔐.
@@ -20,6 +20,22 @@
 - [PrettyTable](https://pypi.org/project/prettytable/) 📊
 - [PyYAML](https://pyyaml.org/) 📄
 - [dotenv](https://pypi.org/project/python-dotenv/) 🔒
+
+## 🔍 Similarity Models
+
+Here is a list of open-source similarity models commonly used for text embeddings and semantic search:
+
+| Model Name       | Description | Architecture | Usage |
+|-----------------|-------------|-------------|-------|
+| **all-MiniLM-L6-v2** | Compact transformer model optimized for semantic similarity and sentence embeddings | MiniLM | `sentence-transformers/all-MiniLM-L6-v2` |
+| **bge-base-en** | BAAI General Embedding model for English with strong retrieval performance | BERT | `BAAI/bge-base-en` |
+| **bge-large-en** | A larger version of `bge-base-en` for improved accuracy in retrieval tasks | BERT | `BAAI/bge-large-en` |
+| **multi-qa-MiniLM-L6-cos-v1** | Optimized for question-answer retrieval, producing sentence embeddings | MiniLM | `sentence-transformers/multi-qa-MiniLM-L6-cos-v1` |
+| **GTR-T5-base** | A retrieval-focused model using Google's T5 architecture | T5 | `sentence-transformers/gtr-t5-base` |
+| **e5-base-v2** | An embedding model optimized for retrieval and ranking | BERT | `intfloat/e5-base-v2` |
+| **mxbai-embed-large-v1** | A highly performant multilingual embedding model | Transformer | `mxbai/mxbai-embed-large-v1` |
+| **paraphrase-MiniLM-L6-v2** | A paraphrase-focused model ideal for sentence similarity tasks | MiniLM | `sentence-transformers/paraphrase-MiniLM-L
+
 
 ## 🚀 Installation
 
@@ -47,12 +63,22 @@
 4. Edit the environment file
 
    ```bash
-   PROVIDER="ollama"
-   API_KEY=""
-   API_URL=http://localhost:11434/api/generate
+      PROVIDER="ollama"
+      API_KEY=""
+      API_URL=http://localhost:11434/api/generate
 
-   # Be carefull with the options below, put it in one line otherwise it will failed
-   LLM_OPTIONS={"model": "llama3.2"}
+      # You can use "$random" to set up random value
+
+      LLM_OPTIONS={"model": "llama3.2:latest"}
+
+      SIMILAIRITY_THRESHOLD="0.30"
+
+      # Source: https://www.sbert.net/docs/sentence_transformer/pretrained_models.html#semantic-search-models
+      # SIMILARITY_TYPE="BAAI"
+      # SIMILARITY_MODEL="BAAI/bge-small-en-v1.5"
+
+      SIMILARITY_TYPE="MINILM"
+      SIMILARITY_MODEL="all-MiniLM-L12-v2"
    ```
    
 ## 🛠️ Usage

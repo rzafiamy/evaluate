@@ -5,8 +5,7 @@ import string
 import uuid
 import csv
 from prettytable import PrettyTable
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
+from .similarity import SentenceTransformerBgeModel, SentenceTransformerModel
 from jinja2 import Environment, FileSystemLoader
 import os
 
@@ -17,7 +16,12 @@ class Evaluator:
         self.config = config
         self.dataset = dataset
         self.output_folder = output_folder
-        self.model = SentenceTransformer(self.config.similarity_model)  # Load a pre-trained embedding model
+        
+        if self.config.similarity_type == 'BAAI':
+            self.model = SentenceTransformerBgeModel(self.config.similarity_model)
+        else:
+            self.model = SentenceTransformerModel(self.config.similarity_model)
+
         self.results = []  # To store results for HTML and CSV report generation
 
     def evaluate_prompt(self, prompt, options):
@@ -44,13 +48,29 @@ class Evaluator:
             return None
 
     def compute_similarity(self, expected, response_text):
-        # Convert texts to embeddings
-        expected_embedding = self.model.encode([expected])
-        response_embedding = self.model.encode([response_text])
+        """
+        Compute similarity using a pre-trained SentenceTransformer model.
 
-        # Compute cosine similarity
-        similarity = cosine_similarity(expected_embedding, response_embedding)[0][0]
-        return similarity
+        - Ensures inputs are lists (batch format)
+        - Handles potential empty or None inputs
+        """
+        if not expected or not response_text:
+            print("Warning: One of the inputs to compute_similarity is empty.")
+            return 0.0  # Return a minimal similarity score
+
+        # Ensure expected and response_text are non-empty lists
+        expected = [expected] if isinstance(expected, str) else expected
+        response_text = [response_text] if isinstance(response_text, str) else response_text
+
+        try:
+            expected_embedding = self.model.encode(expected)
+            response_embedding = self.model.encode(response_text)
+
+            return self.model.compute_similarity(expected_embedding, response_embedding)
+        except IndexError as e:
+            print(f"IndexError in sentence_transformers: {e}")
+            return 0.0  # Fallback similarity score in case of failure
+
 
     def generate_csv_report(self, csv_file):
         """Generate a CSV report from the results."""
