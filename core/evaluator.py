@@ -24,7 +24,7 @@ class Evaluator:
 
         self.results = []  # To store results for HTML and CSV report generation
 
-    def evaluate_prompt(self, prompt, options):
+    def evaluate_prompt(self, prompt, model, options):
         headers = {
             'Content-Type': 'application/json'
         }
@@ -32,7 +32,7 @@ class Evaluator:
         if self.config.api_key:
             headers['Authorization'] = f'Bearer {self.config.api_key}'
 
-        data = {'prompt': prompt, **options}
+        data = {'prompt': prompt, 'stream': False, 'model': model, 'options': options}
 
         try:
             response = requests.post(self.config.api_url, json=data, headers=headers)
@@ -112,11 +112,9 @@ class Evaluator:
                 raise ValueError("Model must be set in the environment file.")
             
             # Evaluate the prompt
-            response = self.evaluate_prompt(prompt, {
-                'model': self.config.options['model'],
+            response = self.evaluate_prompt(prompt, self.config.options['model'],  {
                 'temperature': temperature,
-                'max_tokens': max_tokens,
-                'stream': False
+                'max_tokens': max_tokens
             })
 
             response = self.format_response(self.config.provider, response)
