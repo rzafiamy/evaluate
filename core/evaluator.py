@@ -22,14 +22,26 @@ class Evaluator:
 
     def evaluate_prompt(self, prompt, options):
         headers = {
-            'Authorization': f'{self.config.api_key}',
             'Content-Type': 'application/json'
         }
 
+        if self.config.api_key:
+            headers['Authorization'] = f'Bearer {self.config.api_key}'
+
         data = {'prompt': prompt, **options}
 
-        response = requests.post(self.config.api_url, json=data, headers=headers)
-        return response.json()
+        try:
+            response = requests.post(self.config.api_url, json=data, headers=headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed: {e}")
+            return None
+        except ValueError as e:
+            print(f"JSON decode error: {e}")
+            print("Full response text:")
+            print(response.text)
+            return None
 
     def compute_similarity(self, expected, response_text):
         # Convert texts to embeddings
@@ -75,37 +87,29 @@ class Evaluator:
             max_tokens = entry['max_tokens']
             language = entry['language']
 
-            # If there are predefined options in environment variables, use them
-            extra_options = {}
-            if self.config.options:
-                # copy the options to extra_options
-                extra_options = self.config.options.copy()
-                
-                # Replace values in options containing "$random" with random and unique 10-character strings not in previous_random
-                for key, value in extra_options.items():
-                    unique_value = self.generate_unique_random_string(previous_random, length=10)
-                    extra_options[key] = value.replace("$random", unique_value)
-
-            print(extra_options)
-
+            # check model
+            if not self.config.options['model']:
+                raise ValueError("Model must be set in the environment file.")
+            
             # Evaluate the prompt
             response = self.evaluate_prompt(prompt, {
+                'model': self.config.options['model'],
                 'temperature': temperature,
-                'category': category,
                 'max_tokens': max_tokens,
-                'language': language,
-                **extra_options
+                'stream': False
             })
 
+            response = self.format_response(self.config.provider, response)
+
             # Extract the response text
-            response_text = response['choices'][0]['message']['content']
+            response_text = response['choices'][0]['text']
             
             # Compute semantic similarity
             similarity = self.compute_similarity(expected, response_text)
             success = similarity >= similarity_threshold
 
             # Display the result in the console
-            table.add_row([test, prompt, category, expected[:50], response_text[:50], f"{similarity:.2f}", success])
+            table.add_row([test, prompt, category, expected[:10], response_text[:10], f"{similarity:.2f}", success])
             print(table)
 
             # Save the result in results list
@@ -117,3 +121,37 @@ class Evaluator:
         # Generate CSV and HTML reports
         self.generate_csv_report(os.path.join(self.output_folder, csv_file))
         self.generate_html_report(template_path, os.path.join(self.output_folder, html_file))
+
+    def format_response(self, provider, response):
+        """
+        Format the response to match OpenAI's API response structure.
+
+        :param provider: str, either "openai" or "ollama"
+        :param response: dict, the original response from the provider
+        :return: dict, formatted response in OpenAI format
+        """
+        if provider == "openai":
+            return response  # Assume OpenAI response is already in the correct format
+
+        elif provider == "ollama":
+            return {
+                "id": "cmpl-" + response.get("model", "unknown"),
+                "object": "text_completion",
+                "created": response.get("created_at", ""),
+                "model": response.get("model", ""),
+                "choices": [
+                    {
+                        "text": response.get("response", ""),
+                        "index": 0,
+                        "finish_reason": "stop" if response.get("done", False) else "incomplete"
+                    }
+                ],
+                "usage": {
+                    "prompt_tokens": response.get("prompt_eval_count", 0),
+                    "completion_tokens": response.get("eval_count", 0),
+                    "total_tokens": response.get("prompt_eval_count", 0) + response.get("eval_count", 0)
+                }
+            }
+        
+        else:
+            raise ValueError("Unsupported provider. Use 'openai' or 'ollama'.")

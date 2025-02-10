@@ -39,11 +39,22 @@
 3. Set up your `.env` file with the necessary API configurations and other parameters:
 
    ```bash
-   cp .env.example .env
+   cp env.example .env
    ```
 
    Edit the `.env` file with your API keys 🔑 and other necessary settings.
 
+4. Edit the environment file
+
+   ```bash
+   PROVIDER="ollama"
+   API_KEY=""
+   API_URL=http://localhost:11434/api/generate
+
+   # Be carefull with the options below, put it in one line otherwise it will failed
+   LLM_OPTIONS={"model": "llama3.2"}
+   ```
+   
 ## 🛠️ Usage
 
 To use the `evaluate` tool, you can run the `manager.py` script with the appropriate arguments.
