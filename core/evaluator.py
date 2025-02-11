@@ -24,16 +24,34 @@ class Evaluator:
 
         self.results = []  # To store results for HTML and CSV report generation
 
-    def evaluate_prompt(self, prompt, model, options):
-        headers = {
-            'Content-Type': 'application/json'
-        }
-
+    def evaluate_prompt(self, provider, prompt, model, options=None):
+        headers = {'Content-Type': 'application/json'}
+        data = {}
+        
         if self.config.api_key:
             headers['Authorization'] = f'Bearer {self.config.api_key}'
-
-        data = {'prompt': prompt, 'stream': False, 'model': model, 'options': options}
-
+        
+        if provider == "openai":
+            data = {
+                'model': model,
+                'messages': [{'role': 'user', 'content': prompt}],
+                'stream': False
+            }
+            if options:
+                data.update(options)  # Add additional OpenAI-specific options
+        
+        elif provider == "ollama":
+            data = {
+                'prompt': prompt,
+                'model': model,
+                'stream': False,
+                'options': options if options else {}  # Ensure options is properly embedded
+            }
+        
+        else:
+            print(f"Unsupported provider: {provider}")
+            return None
+        
         try:
             response = requests.post(self.config.api_url, json=data, headers=headers)
             response.raise_for_status()
@@ -112,7 +130,7 @@ class Evaluator:
                 raise ValueError("Model must be set in the environment file.")
             
             # Evaluate the prompt
-            response = self.evaluate_prompt(prompt, self.config.options['model'],  {
+            response = self.evaluate_prompt(self.config.provider, prompt, self.config.options['model'],  {
                 'temperature': temperature,
                 'max_tokens': max_tokens
             })
@@ -149,6 +167,9 @@ class Evaluator:
         :return: dict, formatted response in OpenAI format
         """
         if provider == "openai":
+            if response.get("choices") and len(response["choices"]) > 0:
+                if not response["choices"][0].get("text") and response["choices"][0]["message"] and response["choices"][0]["message"].get("content"):
+                    response["choices"][0]["text"] = response["choices"][0]["message"]["content"]        
             return response  # Assume OpenAI response is already in the correct format
 
         elif provider == "ollama":

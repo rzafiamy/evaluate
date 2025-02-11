@@ -3,7 +3,7 @@
   category: "attention to detail"
   expected: "'Encyclopedia' contains 6 vowels: e, y, o, e, i, and a."
   temperature: 0.3
-  max_tokens: 10
+  max_tokens: 100
   language: "en"
 
 - prompt: "What is the third word in the sentence: 'Precision in details improves accuracy'?"
@@ -11,7 +11,7 @@
   category: "attention to detail"
   expected: "The third word in the sentence is 'details'."
   temperature: 0.3
-  max_tokens: 10
+  max_tokens: 100
   language: "en"
 
 - prompt: "In the sentence 'The quick brown fox jumps over the lazy dog', how many times does the letter 'o' appear?"
@@ -19,7 +19,7 @@
   category: "attention to detail"
   expected: "The letter 'o' appears 4 times in the sentence."
   temperature: 0.3
-  max_tokens: 10
+  max_tokens: 100
   language: "en"
 
 - prompt: "Which number is missing in this pattern: 1, 3, 6, __, 15?"
@@ -27,7 +27,7 @@
   category: "attention to detail"
   expected: "The missing number is 10, as the pattern increases by 2, 3, 4, and then 5."
   temperature: 0.3
-  max_tokens: 10
+  max_tokens: 200
   language: "en"
 
 - prompt: "Identify the grammatical error in the sentence: 'She go to the market every morning.'"
@@ -35,7 +35,7 @@
   category: "attention to detail"
   expected: "The verb 'go' should be 'goes' to match the singular subject 'She'."
   temperature: 0.3
-  max_tokens: 20
+  max_tokens: 100
   language: "en"
 
 - prompt: "Which of these sentences contains an inconsistency? 'Tomorrow, I will finish my work and send the report.' 'Yesterday, I completed my task and submit my report.'"
@@ -43,7 +43,7 @@
   category: "attention to detail"
   expected: "The second sentence contains an inconsistency because 'completed' is past tense, while 'submit' is present tense."
   temperature: 0.3
-  max_tokens: 20
+  max_tokens: 100
   language: "en"
 
 - prompt: "What is the sum of all the digits in the number 548?"
@@ -51,7 +51,7 @@
   category: "attention to detail"
   expected: "The sum of the digits 5, 4, and 8 is 17."
   temperature: 0.3
-  max_tokens: 10
+  max_tokens: 100
   language: "en"
 
 - prompt: "Find the inconsistency in this statement: 'Sarah has 12 apples. She gave away 5 and now has 8 left.'"
@@ -59,7 +59,7 @@
   category: "attention to detail"
   expected: "The inconsistency is in the final count; after giving away 5 apples, Sarah should have 7 left, not 8."
   temperature: 0.3
-  max_tokens: 20
+  max_tokens: 100
   language: "en"
 
 - prompt: "Which day has a different time schedule? Monday 9am-5pm, Tuesday 9am-5pm, Wednesday 10am-5pm, Thursday 9am-5pm, Friday 9am-5pm."
@@ -67,7 +67,7 @@
   category: "attention to detail"
   expected: "Wednesday has a different schedule, as it starts at 10am instead of 9am."
   temperature: 0.3
-  max_tokens: 20
+  max_tokens: 100
   language: "en"
 
 - prompt: "Which of these words does NOT contain the letter 'e'? 'Telescope', 'Mountain', 'Speed', 'Elephant'."
@@ -75,5 +75,5 @@
   category: "attention to detail"
   expected: "'Mountain' does not contain the letter 'e', while the other words do."
   temperature: 0.3
-  max_tokens: 20
+  max_tokens: 100
   language: "en"
