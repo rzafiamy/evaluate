@@ -91,12 +91,13 @@ class Evaluator:
 
 
     def generate_csv_report(self, csv_file):
-        """Generate a CSV report from the results."""
+        """Generate a CSV report from the results using tab as the separator."""
         with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file, delimiter='\t')  # Set tab as the delimiter
             writer.writerow(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
             for result in self.results:
                 writer.writerow(result)
+
 
     def generate_html_report(self, template_path, html_file):
         """Generate an HTML report using a template file."""

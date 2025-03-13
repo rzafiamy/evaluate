@@ -1,0 +1,79 @@
+- prompt: "Write an SMS to a friend letting them know you'll be a bit late for dinner."
+  test: 1
+  category: "message writing: SMS - Beginner"
+  expected: "Hey, I'm running a bit late for dinner. I'll be there in about 20 minutes. See you soon!"
+  temperature: 0.3
+  max_tokens: 100
+  language: "en"
+
+- prompt: "Draft an email asking a colleague for the meeting schedule for the upcoming week."
+  test: 2
+  category: "message writing: Email - Beginner"
+  expected: "Subject: Meeting Schedule Request\n\nHi [Colleague],\n\nCould you please send me the meeting schedule for the upcoming week? I appreciate your help.\n\nBest regards,\n[Your Name]"
+  temperature: 0.3
+  max_tokens: 150
+  language: "en"
+
+- prompt: "Compose a casual social media post congratulating a friend on their promotion."
+  test: 3
+  category: "message writing: Social Network - Beginner"
+  expected: "Congrats on your promotion! So proud of you and excited to see all the amazing things you'll accomplish next."
+  temperature: 0.3
+  max_tokens: 100
+  language: "en"
+
+- prompt: "Write a formal letter to a company requesting a refund for a faulty product."
+  test: 4
+  category: "message writing: Formal Letter - Intermediate"
+  expected: "Dear Customer Service,\n\nI am writing to request a refund for a faulty product I purchased. I have enclosed my receipt and details of the issue. I kindly ask you to process my refund at your earliest convenience.\n\nThank you for your attention.\n\nSincerely,\n[Your Name]"
+  temperature: 0.3
+  max_tokens: 150
+  language: "en"
+
+- prompt: "Draft a friendly email inviting a coworker to a team-building event next week."
+  test: 5
+  category: "message writing: Email - Intermediate"
+  expected: "Subject: Invitation to Team-Building Event\n\nHi [Coworker],\n\nI hope you're well. I wanted to invite you to our team-building event next week. It would be great to have you join us for some fun and collaboration outside the office.\n\nBest,\n[Your Name]"
+  temperature: 0.3
+  max_tokens: 150
+  language: "en"
+
+- prompt: "Write a persuasive social media post encouraging your community to adopt sustainable practices for the environment."
+  test: 6
+  category: "message writing: Social Network - Advanced"
+  expected: "Our planet deserves better! Let's embrace sustainable practices—reduce waste, recycle, and support eco-friendly initiatives. Every small action can lead to big changes. Join us in making a positive impact!"
+  temperature: 0.3
+  max_tokens: 150
+  language: "en"
+
+- prompt: "Compose an SMS in a professional tone confirming an appointment with a client."
+  test: 7
+  category: "message writing: SMS - Advanced"
+  expected: "Good afternoon, this is [Your Name] from [Company]. I'm confirming our appointment scheduled for tomorrow at 2 PM. Please advise if any changes are needed. Thank you."
+  temperature: 0.3
+  max_tokens: 100
+  language: "en"
+
+- prompt: "Draft a detailed business email negotiating contract terms with a vendor."
+  test: 8
+  category: "message writing: Email - Advanced"
+  expected: "Subject: Contract Terms Discussion\n\nDear [Vendor Name],\n\nI hope this email finds you well. I would like to discuss some points regarding the current contract terms. We have reviewed the proposal and have a few suggestions for adjustments. Could we schedule a meeting to go over these details?\n\nThank you for your time and consideration.\n\nBest regards,\n[Your Name]\n[Your Position]\n[Company]"
+  temperature: 0.3
+  max_tokens: 200
+  language: "en"
+
+- prompt: "Write a formal complaint letter to the municipal authority addressing issues with public transportation."
+  test: 9
+  category: "message writing: Formal Letter - Advanced"
+  expected: "Dear [Municipal Authority],\n\nI am writing to formally complain about the ongoing issues with our public transportation system. The delays, overcrowding, and lack of maintenance have significantly affected daily commuters. I urge you to take prompt action to resolve these concerns. I look forward to your response.\n\nSincerely,\n[Your Name]"
+  temperature: 0.3
+  max_tokens: 200
+  language: "en"
+
+- prompt: "Compose a multi-part message: First, write a concise email summarizing a week's progress on a project. Then, create a short social media post celebrating the team's success."
+  test: 10
+  category: "message writing: Multi-format - Expert"
+  expected: "Email:\nSubject: Weekly Project Update\n\nDear Team,\n\nWe made significant progress this week. The initial phase of testing is complete, and key improvements have been identified. Thank you all for your hard work.\n\nBest regards,\n[Your Name]\n\nSocial Media Post:\nProud to announce our team's success this week! Hard work and collaboration lead to great achievements. Keep it up, everyone!"
+  temperature: 0.3
+  max_tokens: 250
+  language: "en"
