@@ -2,21 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LLM Evaluator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>LLM Evaluator Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 class="text-2xl font-bold mb-4">LLM Evaluator Web Interface</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <label class="block mb-2">Upload YAML Dataset</label>
-            <input type="file" name="dataset" required class="block w-full mb-4 border rounded p-2">
-            
-            <label class="block mb-2">Wait Time (seconds)</label>
-            <input type="number" name="wait_time" value="2" class="block w-full mb-4 border rounded p-2">
+<body>
+    <!-- Sidebar -->
+    <aside>
+        <h1>🛠️ User Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="loadPage('evaluate')">🚀 Evaluate LLM</a></li>
+                <li><a href="#" onclick="loadPage('results')">📊 View Results</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Evaluate</button>
-        </form>
-    </div>
+    <!-- Main Content -->
+    <main id="content">
+        <h2>Welcome to LLM Evaluator!</h2>
+        <p>Select an option from the sidebar.</p>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

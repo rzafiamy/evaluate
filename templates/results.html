@@ -5,18 +5,20 @@
     <title>Evaluation Results</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h2 class="text-xl font-bold mb-4">Evaluation Completed!</h2>
+<body class="bg-gray-900 text-white">
+    <div class="max-w-4xl mx-auto p-10">
+        <h2 class="text-2xl font-bold mb-6">✅ Evaluation Completed!</h2>
 
-        <div class="flex space-x-4">
-            <a href="{{ url_for('download_file', filename=filename_csv) }}" class="bg-green-500 text-white py-2 px-4 rounded">Download CSV</a>
-            <a href="{{ url_for('download_file', filename=filename_html) }}" class="bg-indigo-500 text-white py-2 px-4 rounded">Download HTML</a>
+        <div class="flex gap-4 mb-6">
+            <a href="{{ url_for('download_file', filename=filename_csv) }}" class="bg-green-600 hover:bg-green-700 py-2 px-4 rounded">Download CSV</a>
+            <a href="{{ url_for('download_file', filename=filename_html) }}" class="bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded">Download HTML</a>
         </div>
 
-        <iframe src="{{ url_for('download_file', filename=filename_html) }}" class="mt-6 w-full h-[500px] border rounded"></iframe>
+        <div class="bg-blue-950 p-4 rounded shadow-lg">
+            <iframe src="{{ url_for('download_file', filename=filename_html) }}" class="w-full h-[600px] bg-white rounded"></iframe>
+        </div>
 
-        <a href="{{ url_for('index') }}" class="block mt-6 text-blue-500">Evaluate Another Dataset</a>
+        <a href="{{ url_for('index') }}" class="block mt-6 text-indigo-400 hover:text-indigo-200">🔄 Evaluate Another Dataset</a>
     </div>
 </body>
 </html>
