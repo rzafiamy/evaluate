@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 py-10">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-bold mb-4">Evaluation Completed!</h2>
+
+        <div class="flex space-x-4">
+            <a href="{{ url_for('download_file', filename=filename_csv) }}" class="bg-green-500 text-white py-2 px-4 rounded">Download CSV</a>
+            <a href="{{ url_for('download_file', filename=filename_html) }}" class="bg-indigo-500 text-white py-2 px-4 rounded">Download HTML</a>
+        </div>
+
+        <iframe src="{{ url_for('download_file', filename=filename_html) }}" class="mt-6 w-full h-[500px] border rounded"></iframe>
+
+        <a href="{{ url_for('index') }}" class="block mt-6 text-blue-500">Evaluate Another Dataset</a>
+    </div>
+</body>
+</html>

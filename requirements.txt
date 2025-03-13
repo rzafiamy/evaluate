@@ -5,3 +5,4 @@ python-dotenv
 sentence-transformers
 scikit-learn
 jinja2
+flask
