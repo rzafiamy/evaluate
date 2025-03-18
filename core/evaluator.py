@@ -24,6 +24,33 @@ class Evaluator:
 
         self.results = []  # To store results for HTML and CSV report generation
 
+    def get_models(self):
+        """Fetch the list of available models from the API endpoint."""
+        headers = {'Content-Type': 'application/json'}
+        
+        if self.config.api_key:
+            headers['Authorization'] = f'Bearer {self.config.api_key}'
+
+        try:
+            response = requests.get(f"{self.config.api_url}/v1/models", headers=headers)
+            response.raise_for_status()  # Raise an error for non-200 responses
+            
+            models = response.json()
+            
+            if isinstance(models, dict) and 'models' in models:
+                return models['models']  # Ensure we're returning only the list
+            
+            return models  # Fallback if API structure differs
+        
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed: {e}")
+            return None
+        except ValueError as e:
+            print(f"JSON decode error: {e}")
+            print("Full response text:")
+            print(response.text)
+            return None
+
     def evaluate_prompt(self, provider, prompt, model, options=None):
         headers = {'Content-Type': 'application/json'}
         data = {}
@@ -53,7 +80,7 @@ class Evaluator:
             return None
         
         try:
-            response = requests.post(self.config.api_url, json=data, headers=headers)
+            response = requests.post(f"{self.config.api_url}/v1/chat/completions", json=data, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -114,7 +141,7 @@ class Evaluator:
                 existing_set.add(random_string)
                 return random_string
 
-    def run(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl'):
+    def run(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl', model=None):
         table = PrettyTable(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
 
         for entry in self.dataset:
@@ -125,13 +152,15 @@ class Evaluator:
             temperature = entry['temperature']
             max_tokens = entry['max_tokens']
             language = entry['language']
+            
+            m = model if model is not None else self.config.options['model']
 
             # check model
-            if not self.config.options['model']:
+            if not m:
                 raise ValueError("Model must be set in the environment file.")
             
             # Evaluate the prompt
-            response = self.evaluate_prompt(self.config.provider, prompt, self.config.options['model'],  {
+            response = self.evaluate_prompt(self.config.provider, prompt, m,  {
                 'temperature': temperature,
                 'max_tokens': max_tokens
             })

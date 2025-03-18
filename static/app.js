@@ -1,15 +1,25 @@
-function loadPage(page) {
+async function loadPage(page) {
     const content = document.getElementById('content');
     if (page === 'evaluate') {
-        content.innerHTML = `
-            <h2>Evaluate LLM</h2>
-            <form action="/evaluate" method="POST" enctype="multipart/form-data">
-                <input type="file" name="dataset" required onchange="previewDataset(event)">
-                <input type="number" name="wait_time" placeholder="Wait Time (seconds)" value="2">
-                <button type="submit">Evaluate</button>
-            </form>
-            <div id="preview-container" class="mt-4"></div>
-            `;
+       // Fetch available models from the API
+       const models = await fetchModels();
+
+       // Construct the model selection dropdown
+       let modelOptions = models.map(model => `<option value="${model.id}">${model.id}</option>`).join('');
+
+       content.innerHTML = `
+           <h2>Evaluate LLM</h2>
+           <form action="/evaluate" method="POST" enctype="multipart/form-data">
+               <input type="file" name="dataset" required onchange="previewDataset(event)">
+               <input type="number" name="wait_time" placeholder="Wait Time (seconds)" value="2">
+               <select name="model" required>
+                   <option value="">Select a Model</option>
+                   ${modelOptions}
+               </select>
+               <button type="submit">Evaluate</button>
+           </form>
+           <div id="preview-container" class="mt-4"></div>
+       `;
     } else if (page === 'results') {
         fetch('/load_results')
             .then(res => res.json())
@@ -19,26 +29,51 @@ function loadPage(page) {
 }
 
 
-function previewDataset(event) {
+async function fetchModels() {
+    try {
+        const response = await fetch('/models'); // Calls the Flask endpoint
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data || []; // Return models array or empty list if not found
+    } catch (error) {
+        console.error('Error fetching models:', error);
+        return [];
+    }
+}
+
+
+async function previewDataset(event) {
     const file = event.target.files[0];
     if (!file) {
         alert('No file selected.');
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const yamlContent = e.target.result;
-        try {
-            const data = jsyaml.load(yamlContent);
-            renderDatasetPreview(data);
-        } catch (error) {
-            document.getElementById('preview-container').innerHTML = `<p class="text-red-500">Invalid YAML file!</p>`;
-            console.error("YAML Parsing error:", error);
+    const formData = new FormData();
+    formData.append("dataset", file); // Attach the file to FormData
+
+    try {
+        const response = await fetch("/load_dataset", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error loading dataset: ${response.statusText}`);
         }
-    };
-    reader.readAsText(file);
+
+        const data = await response.json(); // Parse response as JSON
+        renderDatasetPreview(data); // Render the dataset preview
+
+    } catch (error) {
+        document.getElementById('preview-container').innerHTML = 
+            `<p class="text-red-500">Failed to load YAML file!</p>`;
+        console.error("Error fetching dataset:", error);
+    }
 }
+
 
 function renderDatasetPreview(data) {
     const container = document.getElementById('preview-container');
