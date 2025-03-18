@@ -376,25 +376,46 @@ function renderResults(files) {
 
     // Group files by model name (prefix before first underscore "_")
     const groupedFiles = {};
-
     files.forEach(file => {
         const modelName = file.filename.split("_")[0]; // Extract model prefix
-
         if (!groupedFiles[modelName]) {
             groupedFiles[modelName] = [];
         }
         groupedFiles[modelName].push(file);
     });
 
-    htmlContent += `<div class="results-grid">`;
-    // Generate HTML per model
-    Object.keys(groupedFiles).forEach(model => {
-        htmlContent += `
-            <div class="model-section">
-                <h3 class="model-title">🤖 Model: ${model}</h3>
-                <div class="results-grid">`;
+    // Create the select dropdown
+    const modelNames = Object.keys(groupedFiles);
+    let savedModel = localStorage.getItem("selectedModel") || modelNames[0];
+    
+    htmlContent += `
+        <select id="model-select">
+            ${modelNames.map(model => `<option value="${model}" ${model === savedModel ? 'selected' : ''}>${model}</option>`).join('')}
+        </select>`;
 
-        groupedFiles[model].forEach(file => {
+    htmlContent += `<div class="results-grid" id="model-results"></div><div id="result-detail" class="mt-6"></div>`;
+    content.innerHTML += htmlContent;
+
+    // Event listener for model selection
+    const modelSelect = document.getElementById('model-select');
+    modelSelect.addEventListener('change', (event) => {
+        localStorage.setItem("selectedModel", event.target.value);
+        displaySelectedModel(event.target.value, groupedFiles);
+    });
+
+    // Initial display of the selected model
+    displaySelectedModel(savedModel, groupedFiles);
+}
+
+function displaySelectedModel(selectedModel, groupedFiles) {
+    const modelResults = document.getElementById("model-results");
+    modelResults.innerHTML = "";
+    
+    if (groupedFiles[selectedModel]) {
+        let htmlContent = `<div class="model-section">
+            <div class="results-grid">`;
+        
+        groupedFiles[selectedModel].forEach(file => {
             htmlContent += `
                 <div class="result-card">
                     <div class="result-icon">📄</div>
@@ -406,11 +427,8 @@ function renderResults(files) {
         });
 
         htmlContent += `</div></div>`; // Close the section
-    });
-    
-
-    htmlContent += `</div><div id="result-detail" class="mt-6"></div>`;
-    content.innerHTML += htmlContent;
+        modelResults.innerHTML = htmlContent;
+    }
 }
 
 

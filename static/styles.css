@@ -205,6 +205,7 @@ a.brand {
 }
 
 /* Input fields and Select Dropdown */
+#model-select,
 .evaluate-form input,
 .evaluate-form select {
     background: #334155;
@@ -315,7 +316,7 @@ a.brand {
 #preview-container ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 20px 0;
 }
 
 #result-detail ul li,
@@ -355,15 +356,15 @@ a.brand {
     max-width: fit-content; /* Ensures it doesn't break layout */
 }
 
+
+
 .result-card {
-    background-color: #1e40af;
-    border-radius: 10px;
-    padding: 15px;
     display: flex;
+    background-color: #1e40af;
     align-items: center;
-    gap: 12px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden; /* Prevents content from escaping */
+    padding: 10px;
+    border: 2px solid #444;
+    border-radius: 8px;
 }
 
 .result-card:hover {
@@ -386,11 +387,11 @@ a.brand {
 
 .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid */
-    gap: 1rem;
-    max-height: 300px;
-    overflow-y: scroll;
+    margin-top:10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 15px;
 }
+
 
 .results-header {
     font-size: 1.6rem;
@@ -622,4 +623,28 @@ a.brand {
     #chart-container {
         padding: 10px;
     }
+}
+
+
+summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    color: white;
+    font-weight: 600;
+    gap: 10px; /* Adds spacing between text and status */
+}
+
+.summary-text {
+    flex-grow: 1;  /* Allows the text to take up available space */
+    min-width: 0;  /* Prevents overflow issues */
+    word-wrap: break-word;  /* Ensures text wraps properly */
+    overflow-wrap: break-word;
+}
+
+.status-label {
+    flex-shrink: 0; /* Prevents status from shrinking */
+    white-space: nowrap; /* Ensures status is always fully visible */
+    color: red;
 }
