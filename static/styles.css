@@ -553,3 +553,56 @@ a.brand {
         line-height: 18px;
     }
 }
+
+
+/* Chart */
+/* Styling for the plot selection dropdown */
+#plot-selector {
+    appearance: none;
+    background-color: #1e293b;
+    color: #ffffff;
+    border: 2px solid #3b82f6;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+}
+
+#plot-selector:hover {
+    background-color: #334155;
+}
+
+#plot-selector:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+}
+
+/* Styling for the plot container */
+#chart-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #0f172a;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Center the canvas */
+#chart-container canvas {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #plot-selector {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #chart-container {
+        padding: 10px;
+    }
+}

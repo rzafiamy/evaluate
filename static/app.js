@@ -285,7 +285,7 @@ async function previewDataset(event) {
 
 
 function renderDatasetPreview(data) {
-
+    console.log(data);
     const datasetName = localStorage.getItem("lastDatasetName");
     
     const container = document.getElementById('preview-container');
@@ -310,6 +310,45 @@ function renderDatasetPreview(data) {
 
     htmlContent += '</ul>';
     container.innerHTML = htmlContent;
+}
+
+// Function to render selected plot dynamically
+function renderSelectedPlot(testData) {
+    const plotSelector = document.getElementById("plot-selector");
+    const chartContainer = document.getElementById("chart-container");
+
+    // Ensure elements exist
+    if (!plotSelector || !chartContainer) return;
+
+    // Listen for changes in dropdown selection
+    plotSelector.addEventListener("change", function () {
+        const selectedPlot = this.value;
+
+        // Initialize chart instance
+        const chart = new Graphic("myChart");
+
+        // Clear previous chart and render new one based on selection
+        switch (selectedPlot) {
+            case "categoryDistribution":
+                chart.renderCategoryDistribution(testData);
+                break;
+            case "passFailStackedBar":
+                chart.renderPassFailStackedBar(testData);
+                break;
+            case "successRate":
+                chart.renderSuccessRate(testData);
+                break;
+            case "tokensVsSimilarity":
+                chart.renderTokensVsSimilarity(testData);
+                break;
+            default:
+                chart.renderCategoryDistribution(testData); // Default plot
+                break;
+        }
+    });
+
+    // Auto-render first default plot
+    plotSelector.dispatchEvent(new Event("change"));
 }
 
 
@@ -369,7 +408,20 @@ function renderResultDetail(data, filename) {
     
     if (!container) return;
 
-    let detailHtml = `<h3 class="font-bold mb-2">📋 Evaluation Results: ${filename}</h3><ul class="space-y-3">`;
+    let detailHtml = `<h3 class="font-bold mb-2">📋 Evaluation Results: ${filename}</h3>
+        <div class="mb-4">
+            <label for="plot-selector" class="text-white font-bold">Select Plot Type:</label>
+            <select id="plot-selector" class="p-2 bg-gray-800 text-white rounded">
+                <option value="categoryDistribution">Category Distribution</option>
+                <option value="passFailStackedBar">Pass/Fail per Category</option>
+                <option value="successRate">Success Rate</option>
+                <option value="tokensVsSimilarity">Tokens vs. Similarity</option>
+            </select>
+        </div>
+        <div id="chart-container" class="mb-6">
+            <canvas id="myChart"></canvas>
+        </div>
+        <ul class="space-y-3">`;
 
     data.forEach(test => {
         const statusClass = test.Success === "✅ Passed" ? "text-green-400" : "text-red-500";
@@ -392,6 +444,9 @@ function renderResultDetail(data, filename) {
 
     detailHtml += `</ul>`;
     container.innerHTML = detailHtml;
+
+     // Initialize the plot selector and chart rendering
+     renderSelectedPlot(data);
 }
 
 // ✅ Show Progress Bar
