@@ -69,6 +69,94 @@ button:hover {
 }
 
 
+/* Evaluate form */
+.evaluate-form {
+    max-width: 500px;
+    background: #1e293b; /* Dark blue background */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    margin: 20px auto;
+    text-align: center;
+    color: #ffffff;
+}
+
+.evaluate-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.evaluate-form input,
+.evaluate-form select {
+    background: #334155;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #ffffff;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+}
+
+.evaluate-form input:focus,
+.evaluate-form select:focus {
+    background: #475569;
+    box-shadow: 0px 0px 8px rgba(59, 130, 246, 0.6);
+}
+
+.evaluate-form button {
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.evaluate-form button:hover {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 15px rgba(59, 130, 246, 0.5);
+}
+
+.evaluate-form button:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.evaluate-form select {
+    appearance: none; /* Remove default arrow */
+    cursor: pointer;
+}
+
+/* Optional: Custom file input styling */
+.evaluate-form input[type="file"] {
+    padding: 10px;
+    border: 2px dashed #3b82f6;
+    text-align: center;
+    cursor: pointer;
+}
+
+.evaluate-form input[type="file"]::file-selector-button {
+    background: #3b82f6;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.evaluate-form input[type="file"]::file-selector-button:hover {
+    background: #2563eb;
+}
+
 /* Test dataset preview container */
 
 #preview-container {
@@ -120,16 +208,12 @@ button:hover {
 }
 
 /* Results preview */
-.results-header {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
-    color: #ffffff;
-}
-
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+.result-info {
+    flex-grow: 1; /* Allows the text container to take remaining space */
+    overflow: hidden;
+    white-space: nowrap; /* Prevents text from wrapping */
+    text-overflow: ellipsis; /* Adds "..." when text overflows */
+    max-width: 100%; /* Ensures it doesn't break layout */
 }
 
 .result-card {
@@ -140,6 +224,7 @@ button:hover {
     align-items: center;
     gap: 12px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; /* Prevents content from escaping */
 }
 
 .result-card:hover {
@@ -147,24 +232,41 @@ button:hover {
     box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
 }
 
-.result-icon {
-    font-size: 2rem;
-}
-
 .result-card a {
     color: #bfdbfe;
     text-decoration: none;
     font-weight: bold;
+    display: block; /* Ensures it respects max-width */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* Adds "..." for overflow */
+    max-width: 100%; /* Prevents text overflow */
 }
 
 .result-card a:hover {
     color: #93c5fd;
 }
 
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Responsive grid */
+    gap: 1rem;
+}
 
-.result-info a{
+.results-header {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.result-icon {
+    font-size: 2rem;
+}
+
+.result-info a {
     cursor: pointer;
 }
+
 
 /* Result table */
 /* Beautiful Table Design */
@@ -256,4 +358,22 @@ tbody td:last-child {
         font-weight: bold;
         color: #aaa;
     }
+}
+
+/* Progress bar */
+/* Progress Bar Styling */
+#progress-container {
+    width: 100%;
+    background-color: #1e3a8a; /* Dark Blue Background */
+    height: 6px;
+    display: none;
+    position: relative;
+    margin-top: 10px;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #3b82f6; /* Lighter Blue Progress */
+    transition: width 0.3s ease-in-out;
 }

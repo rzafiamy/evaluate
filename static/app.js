@@ -1,5 +1,7 @@
 async function loadPage(page) {
     const content = document.getElementById('content');
+    content.innerHTML = `<div id="progress-container"><div id="progress-bar"></div></div>`;
+
     if (page === 'evaluate') {
        // Fetch available models from the API
        const models = await fetchModels();
@@ -7,41 +9,50 @@ async function loadPage(page) {
        // Construct the model selection dropdown
        let modelOptions = models.map(model => `<option value="${model.id}">${model.id}</option>`).join('');
 
-       content.innerHTML = `
+       content.innerHTML += `
            <h2>Evaluate LLM</h2>
-           <form action="/evaluate" method="POST" enctype="multipart/form-data">
-               <input type="file" name="dataset" required onchange="previewDataset(event)">
-               <input type="number" name="wait_time" placeholder="Wait Time (seconds)" value="2">
-               <select name="model" required>
-                   <option value="">Select a Model</option>
-                   ${modelOptions}
-               </select>
-               <button type="submit">Evaluate</button>
-           </form>
+           <div class="evaluate-form">
+            <form action="/evaluate" method="POST" enctype="multipart/form-data">
+                <input type="file" name="dataset" required onchange="previewDataset(event)">
+                <input type="number" name="wait_time" placeholder="Wait Time (seconds)" value="2">
+                <select name="model" required>
+                    <option value="">Select a Model</option>
+                    ${modelOptions}
+                </select>
+                <button type="submit">Evaluate</button>
+            </form>
+           </div>
            <div id="preview-container" class="mt-4"></div>
        `;
     } else if (page === 'results') {
         fetch('/load_results')
-            .then(res => res.json())
-            .then(files => renderResults(files.files))
-            .catch(err => console.error(err));
+            showProgressBar();
+            fetch('/load_results')
+                .then(res => res.json())
+                .then(files => renderResults(files.files))
+                .catch(err => console.error(err))
+                .finally(() => hideProgressBar());
     }
 }
 
 
 async function fetchModels() {
     try {
-        const response = await fetch('/models'); // Calls the Flask endpoint
+        showProgressBar();
+        const response = await fetch('/models');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        return data || []; // Return models array or empty list if not found
+        return data || [];
     } catch (error) {
         console.error('Error fetching models:', error);
         return [];
+    } finally {
+        hideProgressBar();
     }
 }
+
 
 
 async function previewDataset(event) {
@@ -52,9 +63,10 @@ async function previewDataset(event) {
     }
 
     const formData = new FormData();
-    formData.append("dataset", file); // Attach the file to FormData
+    formData.append("dataset", file);
 
     try {
+        showProgressBar();
         const response = await fetch("/load_dataset", {
             method: "POST",
             body: formData
@@ -64,15 +76,17 @@ async function previewDataset(event) {
             throw new Error(`Error loading dataset: ${response.statusText}`);
         }
 
-        const data = await response.json(); // Parse response as JSON
-        renderDatasetPreview(data); // Render the dataset preview
-
+        const data = await response.json();
+        renderDatasetPreview(data);
     } catch (error) {
         document.getElementById('preview-container').innerHTML = 
             `<p class="text-red-500">Failed to load YAML file!</p>`;
         console.error("Error fetching dataset:", error);
+    } finally {
+        hideProgressBar();
     }
 }
+
 
 
 function renderDatasetPreview(data) {
@@ -91,7 +105,7 @@ function renderDatasetPreview(data) {
 function renderResults(files) {
     const content = document.getElementById('content');
     if (files.length === 0) {
-        content.innerHTML = `
+        content.innerHTML += `
             <div class="no-results">No evaluation results found.</div>`;
         return;
     }
@@ -111,23 +125,26 @@ function renderResults(files) {
 
     htmlContent += `</div>`;
     htmlContent += `<div id="result-detail" class="mt-6"></div>`;
-    document.getElementById('content').innerHTML = htmlContent;
+    document.getElementById('content').innerHTML += htmlContent;
 }
 
 
 async function loadResultDetail(filename) {
-    fetch(`/result_content/${filename}`) // Use the Flask API endpoint
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json(); // Parse JSON response
-        })
-        .then(data => {
-            renderResultDetail(data, filename); // Pass parsed JSON data
-        })
-        .catch(err => console.error('Error loading data:', err));
+    try {
+        showProgressBar();
+        const response = await fetch(`/result_content/${filename}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        renderResultDetail(data, filename);
+    } catch (error) {
+        console.error('Error loading data:', error);
+    } finally {
+        hideProgressBar();
+    }
 }
+
 
 
 function renderResultDetail(data, filename) {
@@ -162,4 +179,31 @@ function renderResultDetail(data, filename) {
     detailHtml += `</tbody></table></div>`;
 
     document.getElementById('result-detail').innerHTML = detailHtml;
+}
+
+function showProgressBar() {
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 90) {
+            clearInterval(interval); // Stop increasing artificially
+        } else {
+            width += 10;
+            progressBar.style.width = width + '%';
+        }
+    }, 300);
+}
+
+function hideProgressBar() {
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.style.width = '100%';
+    setTimeout(() => {
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+    }, 500);
 }
