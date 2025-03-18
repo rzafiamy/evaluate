@@ -35,6 +35,31 @@ async function loadPage(page) {
 
         // Attach event listener for real-time progress updates
         document.getElementById("evaluation-form").addEventListener("submit", startEvaluation);
+
+        // Restore Form State
+        restoreFormState();
+
+        // Restore last dataset
+        const lastDataset = localStorage.getItem("lastDataset");
+        if (lastDataset) {
+            renderDatasetPreview(JSON.parse(lastDataset));
+        }
+
+        // Restore evaluation progress
+        const lastEvaluation = localStorage.getItem("evaluationStatus");
+        if (lastEvaluation) {
+            const evaluations = JSON.parse(lastEvaluation);
+            for (const testId in evaluations) {
+                updateTestStatus(evaluations[testId]);
+            }
+        }
+
+        const form = document.getElementById("evaluation-form");
+
+        if (form) {
+            console.log("Hello")
+            form.addEventListener("change", saveFormState);
+        }
     } else if (page === 'results') {
         showProgressBar();
         fetch('/load_results')
@@ -42,6 +67,45 @@ async function loadPage(page) {
             .then(files => renderResults(files.files))
             .catch(err => console.error(err))
             .finally(() => hideProgressBar());
+    }
+}
+
+function saveFormState() {
+    const datasetInput = document.querySelector("input[name='dataset']");
+    const waitTimeInput = document.querySelector("input[name='wait_time']");
+    const modelInput = document.querySelector("select[name='model']");
+
+    const formState = {
+        dataset: datasetInput?.files[0]?.name || localStorage.getItem("lastDatasetName") || "",
+        wait_time: waitTimeInput.value,
+        model: modelInput.value
+    };
+
+    localStorage.setItem("formState", JSON.stringify(formState));
+}
+
+function restoreFormState() {
+    const formState = JSON.parse(localStorage.getItem("formState"));
+
+    if (formState) {
+        const waitTimeInput = document.querySelector("input[name='wait_time']");
+        const modelInput = document.querySelector("select[name='model']");
+        const datasetInput = document.querySelector("input[name='dataset']");
+        const datasetLabel = document.querySelector("label[for='dataset']");
+        const previewContainer = document.getElementById("preview-container");
+
+        if (waitTimeInput) waitTimeInput.value = formState.wait_time || "2";
+        if (modelInput) modelInput.value = formState.model || "";
+
+        const lastDatasetName = localStorage.getItem("lastDatasetName");
+        if (lastDatasetName && datasetLabel) {
+            datasetLabel.innerHTML = `Dataset (Last used: <strong>${lastDatasetName}</strong>)`;
+
+            // Show a message requiring the user to re-upload
+            previewContainer.innerHTML = `
+                <p class="text-yellow-500">⚠️ File selection does not persist. Please re-upload <strong>${lastDatasetName}</strong> if needed.</p>
+            `;
+        }
     }
 }
 
@@ -149,6 +213,11 @@ function updateTestStatus(update) {
             detailsContainer.innerHTML = `<p class="text-red-500">❌ ${update.message}</p>`;
         }
     }
+
+    // Save progress status to localStorage
+    const evaluationData = JSON.parse(localStorage.getItem("evaluationStatus")) || {};
+    evaluationData[update.test] = update;
+    localStorage.setItem("evaluationStatus", JSON.stringify(evaluationData));
 }
 
 
@@ -180,6 +249,12 @@ async function previewDataset(event) {
         return;
     }
 
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        localStorage.setItem("lastDatasetName", file.name);
+    };
+    reader.readAsText(file); // Needed to trigger the onload event
+
     const formData = new FormData();
     formData.append("dataset", file);
 
@@ -195,9 +270,10 @@ async function previewDataset(event) {
         }
 
         const data = await response.json();
+        localStorage.setItem("lastDataset", JSON.stringify(data)); // Save dataset preview
         renderDatasetPreview(data);
     } catch (error) {
-        document.getElementById('preview-container').innerHTML = 
+        document.getElementById('preview-container').innerHTML =
             `<p class="text-red-500">Failed to load YAML file!</p>`;
         console.error("Error fetching dataset:", error);
     } finally {
@@ -207,9 +283,13 @@ async function previewDataset(event) {
 
 
 
+
 function renderDatasetPreview(data) {
+
+    const datasetName = localStorage.getItem("lastDatasetName");
+    
     const container = document.getElementById('preview-container');
-    let htmlContent = '<h3 class="font-bold mb-2">📋 Test Cases Preview:</h3><ul class="space-y-3">';
+    let htmlContent = `<h3 class="font-bold mb-2">📋 Test Cases : ${datasetName}</h3><ul class="space-y-3">`;
 
     data.forEach(test => {
         htmlContent += `
@@ -284,40 +364,37 @@ async function loadResultDetail(filename) {
 
 
 
-
 function renderResultDetail(data, filename) {
-    let detailHtml = `<h3 class="tab-title">📝 Details for: ${filename}</h3>`;
-    detailHtml += `<div class="table-container">
-        <table class="result-table">
-            <thead>
-                <tr>
-                    <th class="py-2 px-3">Test</th>
-                    <th class="py-2 px-4">Prompt</th>
-                    <th>Category</th>
-                    <th>Expected</th>
-                    <th>Response</th>
-                    <th>Similarity</th>
-                    <th>Success</th>
-                </tr>
-            </thead>
-            <tbody>`;
+    const container = document.getElementById('result-detail');
+    
+    if (!container) return;
 
-    data.forEach(row => {
-        detailHtml += `<tr class="border-b border-gray-700 hover:bg-gray-700 transition">
-            <td>${row.Test}</td>
-            <td>${row.Prompt}</td>
-            <td>${row.Category}</td>
-            <td>${row.Expected}</td>
-            <td>${row.Response}</td>
-            <td>${row.Similarity}</td>
-            <td class=${row.Success}>${row.Success}</td>
-        </tr>`;
+    let detailHtml = `<h3 class="font-bold mb-2">📋 Evaluation Results: ${filename}</h3><ul class="space-y-3">`;
+
+    data.forEach(test => {
+        const statusClass = test.Success === "✅ Passed" ? "text-green-400" : "text-red-500";
+        detailHtml += `
+            <li class="mb-2 p-3 bg-blue-900 rounded shadow-lg" id="test-${test.Test}">
+                <details class="group">
+                    <summary class="cursor-pointer flex justify-between items-center text-white font-semibold">
+                        🔹 <strong>Test ${test.Test}:</strong> ${test.Prompt}
+                        <span class="status-label ${statusClass}">${test.Success === true ? "✅ Passed" : "❌ Failed"}</span>
+                    </summary>
+                    <div class="ml-5 mt-2 text-gray-200 detailed-results">
+                        <p><strong>Category:</strong> ${test.Category || "N/A"}</p>
+                        <p><strong>Expected:</strong> ${test.Expected || "N/A"}</p>
+                        <p><strong>Result:</strong> ${test.Response || "Pending..."}</p>
+                        <p><strong>Similarity:</strong> ${test.Similarity ? test.Similarity.toFixed(2) : "N/A"}</p>
+                    </div>
+                </details>
+            </li>`;
     });
 
-    detailHtml += `</tbody></table></div>`;
-
-    document.getElementById('result-detail').innerHTML = detailHtml;
+    detailHtml += `</ul>`;
+    container.innerHTML = detailHtml;
 }
+
+// ✅ Show Progress Bar
 
 function showProgressBar() {
     const progressContainer = document.getElementById('progress-container');
