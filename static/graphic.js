@@ -21,7 +21,7 @@ class Graphic {
         
         const ctx = document.getElementById(this.canvasId).getContext("2d");
         const categoryCounts = data.reduce((acc, item) => {
-            acc[item.category] = (acc[item.category] || 0) + 1;
+            acc[item.Category] = (acc[item.Category] || 0) + 1;
             return acc;
         }, {});
 
@@ -56,9 +56,9 @@ class Graphic {
 
         const ctx = document.getElementById(this.canvasId).getContext("2d");
         const groupedData = data.reduce((acc, item) => {
-            if (!acc[item.category]) acc[item.category] = { passed: 0, failed: 0 };
-            if (item.success) acc[item.category].passed += 1;
-            else acc[item.category].failed += 1;
+            if (!acc[item.category]) acc[item.Category] = { passed: 0, failed: 0 };
+            if (item.Success) acc[item.Category].passed += 1;
+            else acc[item.Category].failed += 1;
             return acc;
         }, {});
 
@@ -94,7 +94,7 @@ class Graphic {
         this.clearCanvas();
 
         const ctx = document.getElementById(this.canvasId).getContext("2d");
-        const passed = data.filter(item => item.success).length;
+        const passed = data.filter(item => item.Success).length;
         const failed = data.length - passed;
 
         new Chart(ctx, {

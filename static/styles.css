@@ -557,6 +557,23 @@ a.brand {
 
 /* Chart */
 /* Styling for the plot selection dropdown */
+/* General chart container - Responsive */
+#chart-container {
+    width: 100%;
+    max-width: 720px; /* Best balance for desktop */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Keeps ratio at 16:9 */
+    margin: auto;
+}
+
+/* Ensure the canvas takes up the full container */
+#chart-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
 #plot-selector {
     appearance: none;
     background-color: #1e293b;

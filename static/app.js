@@ -313,21 +313,27 @@ function renderDatasetPreview(data) {
 }
 
 // Function to render selected plot dynamically
+// Function to render selected plot dynamically and save to localStorage
 function renderSelectedPlot(testData) {
     const plotSelector = document.getElementById("plot-selector");
     const chartContainer = document.getElementById("chart-container");
 
-    // Ensure elements exist
     if (!plotSelector || !chartContainer) return;
 
-    // Listen for changes in dropdown selection
+    // Restore last selected plot from localStorage (or default to 'categoryDistribution')
+    const lastSelectedPlot = localStorage.getItem("lastSelectedPlot") || "categoryDistribution";
+    plotSelector.value = lastSelectedPlot;
+
     plotSelector.addEventListener("change", function () {
         const selectedPlot = this.value;
+
+        // Save selected plot to localStorage
+        localStorage.setItem("lastSelectedPlot", selectedPlot);
 
         // Initialize chart instance
         const chart = new Graphic("myChart");
 
-        // Clear previous chart and render new one based on selection
+        // Render chart based on selection
         switch (selectedPlot) {
             case "categoryDistribution":
                 chart.renderCategoryDistribution(testData);
@@ -342,14 +348,15 @@ function renderSelectedPlot(testData) {
                 chart.renderTokensVsSimilarity(testData);
                 break;
             default:
-                chart.renderCategoryDistribution(testData); // Default plot
+                chart.renderCategoryDistribution(testData);
                 break;
         }
     });
 
-    // Auto-render first default plot
+    // Auto-render last saved plot
     plotSelector.dispatchEvent(new Event("change"));
 }
+
 
 
 
