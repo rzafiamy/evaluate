@@ -3,6 +3,11 @@ class Graphic {
         this.canvasId = canvasId;
     }
 
+    // Fetch CSS Root Variables
+    getCSSVariable(variable) {
+        return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+    }
+
     // Helper function to clear previous chart before rendering
     clearCanvas() {
         const canvas = document.getElementById(this.canvasId);
@@ -32,8 +37,8 @@ class Graphic {
                 datasets: [{
                     label: "Number of Tests",
                     data: Object.values(categoryCounts),
-                    backgroundColor: "rgba(54, 162, 235, 0.7)",
-                    borderColor: "rgba(54, 162, 235, 1)",
+                    backgroundColor: this.getCSSVariable("--secondary-blue"),
+                    borderColor: this.getCSSVariable("--secondary-blue-border"),
                     borderWidth: 1
                 }]
             },
@@ -70,12 +75,12 @@ class Graphic {
                     {
                         label: "Passed",
                         data: Object.values(groupedData).map(v => v.passed),
-                        backgroundColor: "rgba(75, 192, 75, 0.7)"
+                        backgroundColor: this.getCSSVariable("--success-green")
                     },
                     {
                         label: "Failed",
                         data: Object.values(groupedData).map(v => v.failed),
-                        backgroundColor: "rgba(255, 99, 132, 0.7)"
+                        backgroundColor: this.getCSSVariable("--fail-red")
                     }
                 ]
             },
@@ -103,7 +108,10 @@ class Graphic {
                 labels: ["Passed", "Failed"],
                 datasets: [{
                     data: [passed, failed],
-                    backgroundColor: ["rgba(75, 192, 192, 0.7)", "rgba(255, 99, 132, 0.7)"]
+                    backgroundColor: [
+                        this.getCSSVariable("--success-green"),
+                        this.getCSSVariable("--fail-red")
+                    ]
                 }]
             },
             options: {
@@ -131,7 +139,7 @@ class Graphic {
                 datasets: [{
                     label: "Tokens vs. Similarity",
                     data: scatterData,
-                    backgroundColor: "rgba(54, 162, 235, 0.7)"
+                    backgroundColor: this.getCSSVariable("--secondary-blue")
                 }]
             },
             options: {

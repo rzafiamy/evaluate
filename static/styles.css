@@ -1,18 +1,57 @@
+/* Define Root Colors */
+:root {
+    --color-background: #111827; /* Tailwind Gray-900 */
+    --color-text: #ffffff;
+    --color-sidebar-start: #00030c;
+    --color-sidebar-end: #051842;
+    --color-input-background: #374151; /* Tailwind Gray-700 */
+    --color-button: #4f46e5; /* Tailwind Indigo-600 */
+    --color-button-hover: #4338ca; /* Tailwind Indigo-700 */
+    --color-footer: #1E3A8A; /* Tailwind Blue-950 */
+    --color-footer-text: #c7d2fe;
+    --color-form-background: #1e293b;
+    --color-form-input: #334155;
+    --color-form-input-focus: #475569;
+    --color-form-file-border: #3b82f6;
+    --color-form-file-button: #3b82f6;
+    --color-form-file-button-hover: #2563eb;
+    --color-list-item-start: #256355;
+    --color-list-item-end: #1d4ed8;
+    --color-progress-bar: #3b82f6;
+    --color-results-background: #1E293B;
+    --color-results-border: #3B82F6;
+
+    --primary-blue: var(--color-footer); /* Aligning with footer dark blue */
+    --primary-blue-border: var(--color-footer-text); /* Lighter blue for contrast */
+
+    --success-green: rgba(16, 185, 129, 0.8); /* Tailwind Emerald-500 - Vibrant Success */
+    --fail-red: rgba(220, 38, 38, 0.8); /* Tailwind Red-600 - Vibrant Failure */
+
+    --success-green-border: rgba(16, 185, 129, 1);
+    --fail-red-border: rgba(220, 38, 38, 1);
+
+    --secondary-blue: var(--color-list-item-end); /* Aligning with gradient blue */
+    --secondary-blue-border: var(--color-progress-bar); /* Lighter blue for border contrast */
+
+    --accent-teal: rgba(6, 182, 212, 0.8); /* Tailwind Cyan-500 - Fresh Highlight */
+}
+
 /* General Styling */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
 }
 
 /* Dark Theme */
 body {
     display: flex;
     flex-direction: column;
-    background-color: #111827; /* Tailwind Gray-900 */
+    background-color: var(--color-background); /* Tailwind Gray-900 */
     color: #ffffff;
     height: 100vh;
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
     margin: 0;
 }
 
@@ -20,7 +59,7 @@ body {
 .sidebar {
     width: 250px;
     height: 100vh;
-    background: linear-gradient(to bottom, #1E3A8A, #2563EB);
+    background: linear-gradient(to bottom, var(--color-sidebar-start), var(--color-sidebar-end));
     color: white;
     padding: 20px;
     font-family: 'Arial', sans-serif;
@@ -54,7 +93,7 @@ body {
     display: block;
     padding: 12px 20px;
     text-decoration: none;
-    color: white;
+    color: var(--color-text);
     font-size: 1.1em;
     font-weight: bold;
     border-radius: 6px;
@@ -82,8 +121,8 @@ main {
 
 /* Sticky Footer */
 footer {
-    background: #1E3A8A;
-    color: white;
+    background: var(--color-footer);
+    color: var(--color-footer-text);
     text-align: center;
     padding: 10px;
     position: fixed;
@@ -148,13 +187,13 @@ input {
 }
 
 button {
-    background-color: #4f46e5; /* Tailwind Indigo-600 */
+    background-color: var(--color-button); /* Tailwind Indigo-600 */
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #4338ca; /* Tailwind Indigo-700 */
+    background-color: var(--color-button-hover); /* Tailwind Indigo-700 */
 }
 
 /* Footer */
@@ -163,15 +202,15 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #1e3a8a; /* Tailwind Blue-950 */
-    color: #c7d2fe;
+    background-color: var(--color-footer); /* Tailwind Blue-950 */
+    color: var(--color-footer-text); ;
     text-align: center;
     padding: 10px 0;
     font-size: 14px;
 }
 
 a.brand {
-    color: white;
+    color: var(--color-text);
     text-decoration: none;
 }
 
@@ -263,6 +302,9 @@ a.brand {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     font-weight: bold;
+    display: block; /* Ensures it takes full row */
+    width: fit-content; /* Makes button only as wide as its content */
+    margin: 0 auto; /* Centers the button */
 }
 
 .evaluate-form button:hover {
@@ -360,7 +402,7 @@ a.brand {
 
 .result-card {
     display: flex;
-    background-color: #1e40af;
+    background-color: var(--color-form-background);
     align-items: center;
     padding: 10px;
     border: 2px solid #444;
@@ -646,5 +688,4 @@ summary {
 .status-label {
     flex-shrink: 0; /* Prevents status from shrinking */
     white-space: nowrap; /* Ensures status is always fully visible */
-    color: red;
 }
