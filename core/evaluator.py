@@ -91,9 +91,9 @@ class Evaluator:
 
 
     def generate_csv_report(self, csv_file):
-        """Generate a CSV report from the results using tab as the separator."""
+        """Generate a CSV report from the results using tab as the separator, ensuring multiline fields are properly quoted."""
         with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file, delimiter='\t')  # Set tab as the delimiter
+            writer = csv.writer(file, delimiter='\t', quoting=csv.QUOTE_ALL, quotechar='"', escapechar='\\')
             writer.writerow(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
             for result in self.results:
                 writer.writerow(result)

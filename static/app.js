@@ -80,15 +80,20 @@ function renderResults(files) {
 }
 
 
-function loadResultDetail(filename) {
-    fetch(`/output/${filename}`)
-        .then(response => response.text())
-        .then(csvText => {
-            const data = Papa.parse(csvToArray(csvText), { header: true }).data;
-            renderResultDetail(data, filename);
+async function loadResultDetail(filename) {
+    fetch(`/result_content/${filename}`) // Use the Flask API endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // Parse JSON response
         })
-        .catch(err => console.error('Error loading CSV:', err));
+        .then(data => {
+            renderResultDetail(data, filename); // Pass parsed JSON data
+        })
+        .catch(err => console.error('Error loading data:', err));
 }
+
 
 function renderResultDetail(data, filename) {
     let detailHtml = `<h3 class="text-lg font-semibold mb-2">📝 Details for: ${filename}</h3>`;
@@ -122,32 +127,4 @@ function renderResultDetail(data, filename) {
     detailHtml += `</tbody></table></div>`;
 
     document.getElementById('result-detail').innerHTML = detailHtml;
-}
-
-async function loadResultDetail(filename) {
-    const res = await fetch(`/output/${filename}`);
-    if (!res.ok) {
-        document.getElementById('result-detail').innerHTML = `<p class="text-red-500">Unable to load result details.</p>`;
-        return;
-    }
-
-    const csvText = await res.text();
-    const data = csvToJSON(csvText);
-    renderResultDetail(data, filename);
-}
-
-// CSV to JSON helper function
-function csvToJSON(csvText) {
-    const lines = csvText.trim().split("\n");
-    const headers = lines.shift().split("\t");
-
-    return lines
-        .filter(line => line.trim() !== '')
-        .map(line => {
-            const values = line.split("\t");
-            return headers.reduce((obj, header, index) => {
-                obj[header] = values[index];
-                return obj;
-            }, {});
-        });
 }
