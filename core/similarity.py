@@ -26,7 +26,7 @@ class SentenceTransformerModel(SimilarityModel):
         """Generate embeddings for the input text."""
         return self.model.encode(text)
     
-    def compute_similarity(self, expected_embedding, response_embedding):
+    def compute_similarity(self, response_embedding, expected_embedding):
         """Compute cosine similarity between expected and response embeddings."""
         return cosine_similarity(expected_embedding, response_embedding)[0][0]
 

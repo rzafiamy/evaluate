@@ -14,6 +14,8 @@ class Config:
         
         self.options = self._load_options(os.getenv('LLM_OPTIONS'))
 
+        self.SYSTEM_PROMPT = "You are an AI assistant. Please respond to the user's question directly without extra comments."
+
         if not self.api_url:
             raise ValueError("API_URL must be set in the environment file.")
 

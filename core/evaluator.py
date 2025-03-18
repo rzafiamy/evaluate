@@ -63,7 +63,7 @@ class Evaluator:
         if provider == "openai":
             data = {
                 'model': model,
-                'messages': [{'role': 'user', 'content': prompt}],
+                'messages': [{'role':'system', 'content': self.config.SYSTEM_PROMPT},{'role': 'user', 'content': prompt}],
                 'stream': False
             }
             if options:
@@ -94,16 +94,20 @@ class Evaluator:
             print(response.text)
             return None
 
-    def compute_similarity(self, expected, response_text):
+    def compute_similarity(self, context, expected, response_text):
         """
         Compute similarity using a pre-trained SentenceTransformer model.
 
         - Ensures inputs are lists (batch format)
         - Handles potential empty or None inputs
         """
-        if not expected or not response_text:
+        if not context and not expected or not response_text:
             print("Warning: One of the inputs to compute_similarity is empty.")
             return 0.0  # Return a minimal similarity score
+
+        # Tested to add context but it is not good for similarity
+        # expected = context+'\n'+expected
+        # response_text = context+'\n'+response_text
 
         # Ensure expected and response_text are non-empty lists
         expected = [expected] if isinstance(expected, str) else expected
@@ -113,7 +117,7 @@ class Evaluator:
             expected_embedding = self.model.encode(expected)
             response_embedding = self.model.encode(response_text)
 
-            return self.model.compute_similarity(expected_embedding, response_embedding)
+            return self.model.compute_similarity(response_embedding, expected_embedding)
         except IndexError as e:
             print(f"IndexError in sentence_transformers: {e}")
             return 0.0  # Fallback similarity score in case of failure
@@ -143,59 +147,102 @@ class Evaluator:
                 existing_set.add(random_string)
                 return random_string
 
-    def run_stream(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl', model=None):
+    def run_stream(self, wait_time, csv_file='report.csv', html_file='report.html', 
+        template_path='templates/result.tpl', model=None):
         """Runs evaluation in streaming mode, yielding real-time updates."""
         total_tests = len(self.dataset)
 
         for index, entry in enumerate(self.dataset, start=1):
-            test_id = entry['test']
-            prompt = entry['prompt']
-            category = entry['category']
-            expected = entry['expected']
-            temperature = entry['temperature']
-            max_tokens = entry['max_tokens']
-            language = entry['language']
-            
-            m = model if model is not None else self.config.options['model']
+            # Extract test metadata
+            test_id = entry.get('test', f"Unknown-{index}")
+            prompt = entry.get('prompt', '')
+            category = entry.get('category', 'N/A')
+            expected = entry.get('expected', '')
+            temperature = entry.get('temperature', 0.7)
+            max_tokens = entry.get('max_tokens', 256)
+            language = entry.get('language', 'en')
+
+            m = model if model is not None else self.config.options.get('model')
 
             if not m:
-                yield json.dumps({"status": "error", "test": test_id, "message": "Model must be set in the environment file."})
+                yield json.dumps({
+                    "status": "error", 
+                    "test": test_id, 
+                    "message": "Model must be set in the environment file."
+                })
                 return
-            
-            yield json.dumps({"status": "running", "test": test_id, "message": f"Test {index}/{total_tests} is running..."})
-
-            # Simulate model evaluation delay
-            time.sleep(wait_time)
-
-            # Evaluate the prompt
-            response = self.evaluate_prompt(self.config.provider, prompt, m, {
-                'temperature': temperature,
-                'max_tokens': max_tokens
-            })
-
-            response = self.format_response(self.config.provider, response)
-
-            # Extract the response text
-            response_text = response['choices'][0]['text']
-
-            # Compute semantic similarity
-            similarity = self.compute_similarity(expected, response_text)
-
-            # ✅ Convert `numpy.float32` to Python `float`
-            similarity = float(similarity)  
-
-            success = similarity >= float(self.config.similarity_threshold)
-
-            # Store result for final report
-            self.results.append([test_id, prompt, category, expected, response_text, f"{similarity:.2f}", success])
 
             yield json.dumps({
-                "status": "completed",
+                "status": "running",
                 "test": test_id,
-                "message": f"Test {index}/{total_tests} completed",
-                "similarity": similarity,
-                "success": success
+                "message": f"Test {index}/{total_tests} is running...",
+                "prompt": prompt,
+                "category": category,
+                "expected": expected,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "result": "N/A",
+                "language": language
             })
+
+            try:
+                # Simulate model evaluation delay
+                time.sleep(wait_time)
+
+                # Evaluate the prompt
+                response = self.evaluate_prompt(self.config.provider, prompt, m,  {
+                    'temperature': temperature,
+                    'max_tokens': max_tokens
+                })
+
+                response = self.format_response(self.config.provider, response)
+
+                # Extract the response text
+                response_text = response['choices'][0]['text']
+
+                # Compute semantic similarity
+                similarity = self.compute_similarity(prompt, expected, response_text)
+
+                # ✅ Convert numpy.float32 to standard Python float
+                similarity = float(similarity)
+
+                success = similarity >= float(self.config.similarity_threshold)
+
+                # Store result for final report
+                self.results.append([
+                    test_id, prompt, category, expected, response_text, f"{similarity:.2f}", success
+                ])
+
+                yield json.dumps({
+                    "status": "completed",
+                    "test": test_id,
+                    "message": f"Test {index}/{total_tests} completed",
+                    "prompt": prompt,
+                    "category": category,
+                    "expected": expected,
+                    "result": response_text,
+                    "temperature": temperature,
+                    "max_tokens": max_tokens,
+                    "language": language,
+                    "similarity": similarity,
+                    "success": success
+                })
+
+            except Exception as e:
+                error_message = f"Error in test {test_id}: {str(e)}"
+                print(error_message)  # Log for debugging
+                yield json.dumps({
+                    "status": "error",
+                    "test": test_id,
+                    "message": error_message,
+                    "prompt": prompt,
+                    "category": category,
+                    "expected": expected,
+                    "temperature": temperature,
+                    "result": "N/A",
+                    "max_tokens": max_tokens,
+                    "language": language
+                })
 
         # Generate final reports
         self.generate_csv_report(os.path.join(self.output_folder, csv_file))
@@ -233,7 +280,7 @@ class Evaluator:
             response_text = response['choices'][0]['text']
             
             # Compute semantic similarity
-            similarity = self.compute_similarity(expected, response_text)
+            similarity = self.compute_similarity(prompt, expected, response_text)
             success = similarity >= float(self.config.similarity_threshold)
 
             # Display the result in the console

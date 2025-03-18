@@ -49,7 +49,8 @@ async function startEvaluation(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    document.getElementById("evaluation-progress").innerHTML = "<h3>Progress:</h3><ul id='progress-log'></ul>";
+    const progressLog = document.getElementById("evaluation-progress");
+    progressLog.innerHTML = "<h3>Progress:</h3><ul id='progress-log'></ul>";
 
     showProgressBar();
 
@@ -60,7 +61,7 @@ async function startEvaluation(event) {
 
     if (!response.ok || !response.body) {
         hideProgressBar();
-        document.getElementById("evaluation-progress").innerHTML += "<p class='text-red-500'>❌ Evaluation failed.</p>";
+        progressLog.insertAdjacentHTML("beforeend", "<p class='text-red-500'>❌ Evaluation failed.</p>");
         return;
     }
 
@@ -83,13 +84,15 @@ async function startEvaluation(event) {
                 if (part.startsWith("data: ")) {
                     const rawMessage = part.replace("data: ", "").trim();
 
-                    let message = JSON.parse(rawMessage);
-                    if (typeof message === "string") {
-                        message = JSON.parse(message);
-                        console.log("Final parsed message:", message);
+                    try {
+                        let message = JSON.parse(rawMessage);
+                        if (typeof message === "string") {
+                            message = JSON.parse(message);
+                        }
+                        updateTestStatus(message);
+                    } catch (error) {
+                        console.error("Error parsing JSON:", error);
                     }
-
-                    updateTestStatus(message);
                 }
             }
         }
@@ -98,40 +101,57 @@ async function startEvaluation(event) {
     await readStream();
 
     hideProgressBar();
-    document.getElementById("evaluation-progress").innerHTML += "<p>✅ Evaluation Completed!</p>";
+    progressLog.insertAdjacentHTML("beforeend", `<p class="evaluation-status">✅ Evaluation Completed!</p>`);
 }
 
 function updateTestStatus(update) {
-    const progressLog = document.getElementById("progress-log");
-    console.log(progressLog)
+    const testElement = document.getElementById(`test-${update.test}`);
+
+    if (!testElement) {
+        console.warn(`Test element not found for test-${update.test}`);
+        return;
+    }
+
+    const statusSpan = testElement.querySelector(".status-label");
+
     if (update.status === "running") {
-        progressLog.innerHTML += `<li>🔄 ${update.message}</li>`;
-
-        const testElement = document.getElementById(`test-${update.test}`);
-        console.log(testElement)
-        if (testElement) {
-            testElement.querySelector(".status-label").innerHTML = "🔄 Running...";
+        statusSpan.innerHTML = "🔄 Running...";
+        statusSpan.style.color = "orange";
+    } 
+    else if (update.status === "completed") {
+        if (statusSpan) {
+            statusSpan.innerHTML = update.success ? "✅ Passed" : "❌ Failed";
+            statusSpan.style.color = update.success ? "green" : "red";
         }
-    } else if (update.status === "completed") {
-        progressLog.innerHTML += `<li>✅ ${update.message}</li>`;
 
-        const testElement = document.getElementById(`test-${update.test}`);
-        if (testElement) {
-            const statusSpan = testElement.querySelector(".status-label");
-            if (statusSpan) {
-                if (update.success) {
-                    statusSpan.innerHTML = "✅ Passed";
-                    statusSpan.style.color = "green";
-                } else {
-                    statusSpan.innerHTML = "❌ Failed";
-                    statusSpan.style.color = "red";
-                }
-            }
+        // Inject all details into the collapsible section
+        let detailsContainer = testElement.querySelector(".group div");
+        if (detailsContainer) {
+            detailsContainer.innerHTML = `
+                <p><strong>Prompt:</strong> ${update.prompt}</p>
+                <p><strong>Category:</strong> ${update.category}</p>
+                <p><strong>Expected:</strong> ${update.expected}</p>
+                <p><strong>Result:</strong> ${update.result}</p>
+                <p><strong>Temperature:</strong> ${update.temperature}</p>
+                <p><strong>Max Tokens:</strong> ${update.max_tokens}</p>
+                <p><strong>Language:</strong> ${update.language}</p>
+                <p><strong>Similarity:</strong> ${update.similarity ? update.similarity.toFixed(2) : "N/A"}</p>
+            `;
         }
-    } else if (update.status === "error") {
-        progressLog.innerHTML += `<li class="text-red-500">❌ ${update.message}</li>`;
+    } 
+    else if (update.status === "error") {
+        statusSpan.innerHTML = "❌ Error";
+        statusSpan.style.color = "red";
+
+        // Append error details
+        let detailsContainer = testElement.querySelector(".group div");
+        if (detailsContainer) {
+            detailsContainer.innerHTML = `<p class="text-red-500">❌ ${update.message}</p>`;
+        }
     }
 }
+
+
 
 
 async function fetchModels() {
@@ -189,16 +209,29 @@ async function previewDataset(event) {
 
 function renderDatasetPreview(data) {
     const container = document.getElementById('preview-container');
-    let htmlContent = '<h3 class="font-bold mb-2">📋 Test Cases Preview:</h3><ul>';
+    let htmlContent = '<h3 class="font-bold mb-2">📋 Test Cases Preview:</h3><ul class="space-y-3">';
+
     data.forEach(test => {
-        htmlContent += `<li class="mb-2 p-3 bg-blue-900 rounded" id="test-${test.test}">
-                            🔹 <strong>Test ${test.test}:</strong> ${test.prompt}
-                            <span class="status-label">⏳ Not Started</span>
-                        </li>`;
+        htmlContent += `
+            <li class="mb-2 p-3 bg-blue-900 rounded shadow-lg" id="test-${test.test}">
+                <details class="group">
+                    <summary class="cursor-pointer flex justify-between items-center text-white font-semibold">
+                        🔹 <strong>Test ${test.test}:</strong> ${test.prompt}
+                        <span class="status-label">⏳ Not Started</span>
+                    </summary>
+                    <div class="ml-5 mt-2 text-gray-200 detailed-results">
+                        <p><strong>Expected:</strong> ${test.expected || "N/A"}</p>
+                        <p><strong>Result:</strong> ${test.result || "Pending..."}</p>
+                        <p><strong>Similarity:</strong> ${test.similarity || "N/A"}</p>
+                    </div>
+                </details>
+            </li>`;
     });
+
     htmlContent += '</ul>';
     container.innerHTML = htmlContent;
 }
+
 
 
 function renderResults(files) {
@@ -253,10 +286,10 @@ async function loadResultDetail(filename) {
 
 
 function renderResultDetail(data, filename) {
-    let detailHtml = `<h3 class="text-lg font-semibold mb-2">📝 Details for: ${filename}</h3>`;
-    detailHtml += `<div class="overflow-auto rounded-lg shadow-lg">
-        <table class="min-w-full bg-gray-800 text-white">
-            <thead class="bg-indigo-700">
+    let detailHtml = `<h3 class="tab-title">📝 Details for: ${filename}</h3>`;
+    detailHtml += `<div class="table-container">
+        <table class="result-table">
+            <thead>
                 <tr>
                     <th class="py-2 px-3">Test</th>
                     <th class="py-2 px-4">Prompt</th>
@@ -271,13 +304,13 @@ function renderResultDetail(data, filename) {
 
     data.forEach(row => {
         detailHtml += `<tr class="border-b border-gray-700 hover:bg-gray-700 transition">
-            <td class="py-2 px-3">${row.Test}</td>
-            <td class="px-3">${row.Prompt}</td>
-            <td class="px-2">${row.Category}</td>
-            <td class="px-2">${row.Expected}</td>
-            <td class="px-2">${row.Response}</td>
-            <td class="px-2">${row.Similarity}</td>
-            <td class="px-2">${row.Success}</td>
+            <td>${row.Test}</td>
+            <td>${row.Prompt}</td>
+            <td>${row.Category}</td>
+            <td>${row.Expected}</td>
+            <td>${row.Response}</td>
+            <td>${row.Similarity}</td>
+            <td class=${row.Success}>${row.Success}</td>
         </tr>`;
     });
 
