@@ -1,12 +1,21 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Dark Theme */
 body {
     display: flex;
     background-color: #111827; /* Tailwind Gray-900 */
     color: #ffffff;
     height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
 }
 
+/* Sidebar */
 aside {
     width: 250px;
     background-color: #1e3a8a; /* Tailwind Blue-950 */
@@ -31,20 +40,22 @@ aside nav ul li {
 
 aside nav ul li a {
     text-decoration: none;
-    color: #c7d2fe;
+    color: #c7d2fe; /* Tailwind Indigo-300 */
     transition: color 0.3s;
 }
 
 aside nav ul li a:hover {
-    color: #93c5fd;
+    color: #93c5fd; /* Tailwind Blue-300 */
 }
 
+/* Main Content */
 main {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
 }
 
+/* Inputs & Buttons */
 input, button {
     width: 100%;
     padding: 8px 10px;
@@ -65,8 +76,22 @@ button {
 }
 
 button:hover {
-    background-color: #4338ca;
+    background-color: #4338ca; /* Tailwind Indigo-700 */
 }
+
+/* Footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1e3a8a; /* Tailwind Blue-950 */
+    color: #c7d2fe;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
 
 
 /* Evaluate form */
@@ -85,6 +110,12 @@ button:hover {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.evaluate-form label {
+    font-weight: bold;
+    color: #ffffff;
+    text-align: left;
 }
 
 .evaluate-form input,

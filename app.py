@@ -1,12 +1,15 @@
 import os
 import yaml
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory, jsonify
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, jsonify, stream_with_context, Response
 from werkzeug.utils import secure_filename
 from core.evaluator import Evaluator
 from core.dataset_loader import DatasetLoader
 from config import Config
 import pandas as pd
 import re
+import json
+import time
+import sys
 
 UPLOAD_FOLDER = './uploads'
 OUTPUT_FOLDER = './output'
@@ -67,31 +70,45 @@ def get_models():
 
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
-    dataset_file = request.files['dataset']
+    dataset_file = request.files.get('dataset')
     wait_time = int(request.form.get('wait_time', 2))
-    model = request.form.get('model')  # Get the selected model
+    model = request.form.get('model')
 
-    if dataset_file:
-        # Sanitize model name
-        safe_model_name = sanitize_filename(model)
+    if not model:
+        return "Error: Model not selected", 400
 
-        filename = secure_filename(dataset_file.filename)
-        dataset_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        dataset_file.save(dataset_path)
+    if not dataset_file:
+        return "Error: No dataset uploaded", 400
 
-        loader = DatasetLoader(dataset_path)
-        dataset = loader.load()
-        config = Config()
+    safe_model_name = sanitize_filename(model)
+    filename = secure_filename(dataset_file.filename)
+    dataset_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    dataset_file.save(dataset_path)
 
-        evaluator = Evaluator(config, dataset, OUTPUT_FOLDER)
-        
-        filebase = os.path.splitext(filename)[0]
-        csv_file = f"{safe_model_name}_{filebase}.csv"
-        html_file = f"{safe_model_name}_{filebase}.html"
+    loader = DatasetLoader(dataset_path)
+    dataset = loader.load()
+    config = Config()
 
-        evaluator.run(wait_time, csv_file=csv_file, html_file=html_file,model=model)
+    evaluator = Evaluator(config, dataset, OUTPUT_FOLDER)
 
-        return redirect(url_for('results', filename_html=html_file, filename_csv=csv_file))
+    filebase = os.path.splitext(filename)[0]
+    csv_file = f"{safe_model_name}_{filebase}.csv"
+    html_file = f"{safe_model_name}_{filebase}.html"
+
+    def generate():
+        """Generator function to stream responses in real-time."""
+        yield f"data: {json.dumps({'status': 'started', 'message': 'Evaluation started'})}\n\n"
+        sys.stdout.flush()  # Force flush output
+
+        for progress in evaluator.run_stream(wait_time, csv_file=csv_file, html_file=html_file, model=model):
+            yield f"data: {json.dumps(progress)}\n\n"
+            sys.stdout.flush()  # Force flush output
+            time.sleep(0.1)  # Give time for updates
+
+        yield f"data: {json.dumps({'status': 'completed', 'message': 'Evaluation complete!'})}\n\n"
+        sys.stdout.flush()  # Ensure final flush
+
+    return Response(stream_with_context(generate()), content_type='text/event-stream')
 
 @app.route('/results')
 def results():
@@ -119,7 +136,17 @@ def preview_dataset():
 
 @app.route('/load_results', methods=['GET'])
 def load_results():
-    files = [f for f in os.listdir(OUTPUT_FOLDER) if f.endswith('.csv')]
+    files = [
+        {
+            "filename": f,
+            "created_at": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.path.getctime(os.path.join(OUTPUT_FOLDER, f))))
+        }
+        for f in os.listdir(OUTPUT_FOLDER) if f.endswith('.csv')
+    ]
+
+    # Sort files by creation date (newest first)
+    files.sort(key=lambda x: x["created_at"], reverse=True)
+
     return jsonify(files=files)
 
 

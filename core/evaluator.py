@@ -8,6 +8,8 @@ from prettytable import PrettyTable
 from .similarity import SentenceTransformerBgeModel, SentenceTransformerModel
 from jinja2 import Environment, FileSystemLoader
 import os
+import json
+import numpy as np  # Ensure NumPy is imported
 
 previous_random = set()
 
@@ -140,6 +142,66 @@ class Evaluator:
             if random_string not in existing_set:
                 existing_set.add(random_string)
                 return random_string
+
+    def run_stream(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl', model=None):
+        """Runs evaluation in streaming mode, yielding real-time updates."""
+        total_tests = len(self.dataset)
+
+        for index, entry in enumerate(self.dataset, start=1):
+            test_id = entry['test']
+            prompt = entry['prompt']
+            category = entry['category']
+            expected = entry['expected']
+            temperature = entry['temperature']
+            max_tokens = entry['max_tokens']
+            language = entry['language']
+            
+            m = model if model is not None else self.config.options['model']
+
+            if not m:
+                yield json.dumps({"status": "error", "test": test_id, "message": "Model must be set in the environment file."})
+                return
+            
+            yield json.dumps({"status": "running", "test": test_id, "message": f"Test {index}/{total_tests} is running..."})
+
+            # Simulate model evaluation delay
+            time.sleep(wait_time)
+
+            # Evaluate the prompt
+            response = self.evaluate_prompt(self.config.provider, prompt, m, {
+                'temperature': temperature,
+                'max_tokens': max_tokens
+            })
+
+            response = self.format_response(self.config.provider, response)
+
+            # Extract the response text
+            response_text = response['choices'][0]['text']
+
+            # Compute semantic similarity
+            similarity = self.compute_similarity(expected, response_text)
+
+            # ✅ Convert `numpy.float32` to Python `float`
+            similarity = float(similarity)  
+
+            success = similarity >= float(self.config.similarity_threshold)
+
+            # Store result for final report
+            self.results.append([test_id, prompt, category, expected, response_text, f"{similarity:.2f}", success])
+
+            yield json.dumps({
+                "status": "completed",
+                "test": test_id,
+                "message": f"Test {index}/{total_tests} completed",
+                "similarity": similarity,
+                "success": success
+            })
+
+        # Generate final reports
+        self.generate_csv_report(os.path.join(self.output_folder, csv_file))
+        self.generate_html_report(template_path, os.path.join(self.output_folder, html_file))
+
+        yield json.dumps({"status": "completed", "message": "Evaluation finished!"})
 
     def run(self, wait_time, csv_file='report.csv', html_file='report.html', template_path='templates/result.tpl', model=None):
         table = PrettyTable(['Test', 'Prompt', 'Category', 'Expected', 'Response', 'Similarity', 'Success'])
