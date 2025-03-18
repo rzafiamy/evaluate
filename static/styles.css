@@ -687,5 +687,63 @@ summary {
 
 .status-label {
     flex-shrink: 0; /* Prevents status from shrinking */
-    white-space: nowrap; /* Ensures status is always fully visible */
+    white-space: nowrap; /* Ensures status is always fully visible */;
+}
+
+
+/* Alert dialog */
+/* Overlay background */
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal box */
+.alert-dialog {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+
+/* Title text */
+.alert-title {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Message text */
+.alert-message {
+    font-size: 16px;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* Close button */
+.alert-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.alert-button:hover {
+    background: #0056b3;
 }

@@ -14,7 +14,8 @@ import numpy as np  # Ensure NumPy is imported
 previous_random = set()
 
 class Evaluator:
-    def __init__(self, config, dataset, output_folder):
+    def __init__(self, config, system, dataset, output_folder):
+        self.system = system
         self.config = config
         self.dataset = dataset
         self.output_folder = output_folder
@@ -61,9 +62,11 @@ class Evaluator:
             headers['Authorization'] = f'Bearer {self.config.api_key}'
         
         if provider == "openai":
+            system = self.system+'\n\n'+self.config.SYSTEM_PROMPT if self.system else self.config.SYSTEM_PROMPT
+
             data = {
                 'model': model,
-                'messages': [{'role':'system', 'content': self.config.SYSTEM_PROMPT},{'role': 'user', 'content': prompt}],
+                'messages': [{'role':'system', 'content': system},{'role': 'user', 'content': prompt}],
                 'stream': False
             }
             if options:

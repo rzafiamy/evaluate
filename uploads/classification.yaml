@@ -1,0 +1,84 @@
+system_prompt: |
+  Classify the following user's question into the correct category. 
+  Reply only with one of the following categories: system, youtube_search, bible_assistant, document_manager, translation_assistant, movie_assistant, search_on_internet, image_generation, music_generation, computer_vision, long_form_writer_assistant, sltestes_assistant, calendar_manager, podcast_assistant, web_scraping, weather_summary, coding_assistant, joke_assistant, plot_generation, travel_assistant, general, summarization, reviewer, prompt_maker, message_and_post_assistant, code_completer, bug_hunter, code_refactorer, documentation_writer, code_reviewer, syntax_checker, test_writer, code_writer, designer, learning_coach, bad, comparator, multipurpose_insight, health_assistant.
+
+tests:
+  - test: 1
+    prompt: "Translate 'Good morning' to Spanish."
+    category: "translation_assistant"
+    expected: "Buenos días"
+    temperature: 0.3
+    max_tokens: 10
+    language: "en"
+
+  - test: 2
+    prompt: "Generate an image of a futuristic cityscape."
+    category: "image_generation"
+    expected: "An AI-generated image of a futuristic cityscape."
+    temperature: 0.7
+    max_tokens: 50
+    language: "en"
+
+  - test: 3
+    prompt: "Write a Python function to check if a number is prime."
+    category: "coding_assistant"
+    expected: "A Python function that determines if a number is prime."
+    temperature: 0.5
+    max_tokens: 100
+    language: "en"
+
+  - test: 4
+    prompt: "Summarize the plot of the movie 'Inception' in one paragraph."
+    category: "movie_assistant"
+    expected: "A concise summary of the movie 'Inception'."
+    temperature: 0.6
+    max_tokens: 150
+    language: "en"
+
+  - test: 5
+    prompt: "Find the current weather in New York."
+    category: "weather_summary"
+    expected: "A brief weather report for New York."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 6
+    prompt: "What does John 3:16 say in the Bible?"
+    category: "bible_assistant"
+    expected: "'For God so loved the world...'"
+    temperature: 0.4
+    max_tokens: 50
+    language: "en"
+
+  - test: 7
+    prompt: "Write a joke about programmers."
+    category: "joke_assistant"
+    expected: "A humorous joke related to programmers."
+    temperature: 0.8
+    max_tokens: 50
+    language: "en"
+
+  - test: 8
+    prompt: "Create a PowerPoint slteste deck outline for a business pitch."
+    category: "sltestes_assistant"
+    expected: "An outline for a business pitch presentation."
+    temperature: 0.5
+    max_tokens: 100
+    language: "en"
+
+  - test: 9
+    prompt: "Find me a recent tech podcast about AI advancements."
+    category: "podcast_assistant"
+    expected: "A recommendation for a recent AI-related podcast."
+    temperature: 0.4
+    max_tokens: 50
+    language: "en"
+
+  - test: 10
+    prompt: "Compare the performance of GPT-4 and Gemini for text summarization."
+    category: "comparator"
+    expected: "A comparison of GPT-4 and Gemini summarization capabilities."
+    temperature: 0.6
+    max_tokens: 200
+    language: "en"

@@ -19,6 +19,8 @@ def main():
     # Load dataset
     loader = DatasetLoader(args.dataset)
     dataset = loader.load()
+    tests = dataset["tests"]
+    system = dataset["system_prompt"]
 
     # check if the output folder exists
     if not os.path.exists(args.output):
@@ -26,7 +28,7 @@ def main():
         exit(1)
     
     # Create an evaluator instance
-    evaluator = Evaluator(config, dataset, args.output)
+    evaluator = Evaluator(config, system, tests, args.output)
 
     # Extract base name from dataset file
     filebase = os.path.splitext(os.path.basename(args.dataset))[0]

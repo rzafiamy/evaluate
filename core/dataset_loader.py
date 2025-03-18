@@ -11,8 +11,11 @@ class DatasetLoader:
             return data
 
     def _validate(self, data):
-        required_keys = {'prompt', 'category','expected', 'temperature', 'max_tokens', 'language'}
-        for entry in data:
+        if "system_prompt" not in data or "tests" not in data:
+            raise ValueError("Dataset must contain 'system_prompt' and 'tests' keys.")
+
+        required_keys = {'test', 'prompt', 'category', 'expected', 'temperature', 'max_tokens', 'language'}
+        for entry in data["tests"]:
             if not required_keys.issubset(entry):
                 missing = required_keys - entry.keys()
-                raise ValueError(f"Missing keys in dataset entry: {missing}")
+                raise ValueError(f"Missing keys in dataset entry {entry.get('test', 'unknown')}: {missing}")

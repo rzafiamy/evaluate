@@ -432,6 +432,38 @@ function displaySelectedModel(selectedModel, groupedFiles) {
 }
 
 
+function updateVerdict(filename, testId) {
+    const newVerdict = document.getElementById(`verdict-${testId}`).value;
+
+    fetch('/update_verdict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            filename: filename,
+            test_id: testId,
+            new_verdict: newVerdict
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            //alert(`✅ Verdict updated for test ID ${testId}`);
+            new AlertDialog('Success', `✅ Verdict updated for test ID ${testId}`).show();
+
+        } else {
+            //alert(`❌ Error updating verdict: ${data.error}`);
+            new AlertDialog('Error', `❌ Error updating verdict: ${data.error}`).show();
+        }
+
+        loadResultDetail(filename);
+    })
+    .catch(error => {
+        console.error("Error updating verdict:", error);
+    });
+}
+
 async function loadResultDetail(filename) {
     try {
         showProgressBar();
@@ -452,7 +484,6 @@ async function loadResultDetail(filename) {
 
 function renderResultDetail(data, filename) {
     const container = document.getElementById('result-detail');
-    
     if (!container) return;
 
     let detailHtml = `<h3 class="font-bold mb-2">📋 Evaluation Results: ${filename}</h3>
@@ -472,6 +503,9 @@ function renderResultDetail(data, filename) {
 
     data.forEach(test => {
         const statusClass = test.Success === "✅ Passed" ? "text-green-400" : "text-red-500";
+        // convert test.Success to a boolean if it's a string
+        test.Success = test.Success === "True" || test.Success === "true" ? true : false;
+
         detailHtml += `
             <li class="mb-2 p-3 bg-blue-900 rounded shadow-lg" id="test-${test.Test}">
                 <details class="group">
@@ -484,6 +518,15 @@ function renderResultDetail(data, filename) {
                         <p><strong>Expected:</strong> ${test.Expected || "N/A"}</p>
                         <p><strong>Result:</strong> ${test.Response || "Pending..."}</p>
                         <p><strong>Similarity:</strong> ${test.Similarity ? test.Similarity.toFixed(2) : "N/A"}</p>
+
+                        <!-- Verdict Dropdown -->
+                        <p><strong>Verdict:</strong>
+                            <select id="verdict-${test.Test}" class="p-2 bg-gray-700 text-white rounded"
+                                onchange="updateVerdict('${filename}', ${test.Test})">
+                                <option value="True" ${test.Success === true ? 'selected' : ''}>✅ Passed</option>
+                                <option value="False" ${test.Success === false ? 'selected' : ''}>❌ Failed</option>
+                            </select>
+                        </p>
                     </div>
                 </details>
             </li>`;
@@ -492,8 +535,8 @@ function renderResultDetail(data, filename) {
     detailHtml += `</ul>`;
     container.innerHTML = detailHtml;
 
-     // Initialize the plot selector and chart rendering
-     renderSelectedPlot(data);
+    // Initialize the plot selector and chart rendering
+    renderSelectedPlot(data);
 }
 
 // ✅ Show Progress Bar
@@ -547,4 +590,68 @@ function relativeDate(dateString) {
         }
     }
     return "Just now";
+}
+
+
+
+
+class AlertDialog {
+    constructor(title, message) {
+        this.title = title;
+        this.message = message;
+        this.dialog = null;
+    }
+
+    show() {
+        // Remove any existing dialog before creating a new one
+        this.remove();
+
+        // Create the modal overlay
+        const overlay = document.createElement("div");
+        overlay.id = "alert-overlay";
+        overlay.classList.add("alert-overlay");
+
+        // Create the modal dialog
+        const dialog = document.createElement("div");
+        dialog.id = "alert-dialog";
+        dialog.classList.add("alert-dialog");
+
+        // Create the title
+        const titleEl = document.createElement("h2");
+        titleEl.innerText = this.title;
+        titleEl.classList.add("alert-title");
+
+        // Create the message
+        const messageEl = document.createElement("p");
+        messageEl.innerText = this.message;
+        messageEl.classList.add("alert-message");
+
+        // Create the close button
+        const closeButton = document.createElement("button");
+        closeButton.innerText = "OK";
+        closeButton.classList.add("alert-button");
+
+        closeButton.addEventListener("click", () => this.remove());
+
+        // Append elements to dialog
+        dialog.appendChild(titleEl);
+        dialog.appendChild(messageEl);
+        dialog.appendChild(closeButton);
+
+        // Append to overlay
+        overlay.appendChild(dialog);
+
+        // Append to body
+        document.body.appendChild(overlay);
+
+        // Store reference
+        this.dialog = overlay;
+    }
+
+    remove() {
+        const existingDialog = document.getElementById("alert-overlay");
+        if (existingDialog) {
+            existingDialog.remove();
+        }
+    }
 }
