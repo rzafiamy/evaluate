@@ -362,35 +362,57 @@ function renderSelectedPlot(testData) {
 
 function renderResults(files) {
     const content = document.getElementById('content');
-    content.innerHTML = `<div id="progress-container"><div id="progress-bar"></div></div>`
+    content.innerHTML = `<div id="progress-container"><div id="progress-bar"></div></div>`;
 
     if (files.length === 0) {
-        content.innerHTML += `
-            <div class="no-results">No evaluation results found.</div>`;
+        content.innerHTML += `<div class="no-results">No evaluation results found.</div>`;
         return;
     }
 
-    let htmlContent = `<h2 class="results-header">📊 Recent Evaluation Results</h2>
-                       <div class="results-grid">`;
+    let htmlContent = `<h2 class="results-header">📊 Recent Evaluation Results</h2>`;
 
-    // Ensure files are sorted by date (descending, newest first)
+    // Sort files by date (newest first)
     files.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    files.forEach(file => {
-        htmlContent += `
-            <div class="result-card">
-                <div class="result-icon">📄</div>
-                <div class="result-info">
-                    <a onclick="loadResultDetail('${file.filename}')">${file.filename}</a>
-                    <div class="result-date">📅 ${relativeDate(file.created_at)}</div>
-                </div>
-            </div>`;
-    });    
+    // Group files by model name (prefix before first underscore "_")
+    const groupedFiles = {};
 
-    htmlContent += `</div>`;
-    htmlContent += `<div id="result-detail" class="mt-6"></div>`;
+    files.forEach(file => {
+        const modelName = file.filename.split("_")[0]; // Extract model prefix
+
+        if (!groupedFiles[modelName]) {
+            groupedFiles[modelName] = [];
+        }
+        groupedFiles[modelName].push(file);
+    });
+
+    htmlContent += `<div class="results-grid">`;
+    // Generate HTML per model
+    Object.keys(groupedFiles).forEach(model => {
+        htmlContent += `
+            <div class="model-section">
+                <h3 class="model-title">🤖 Model: ${model}</h3>
+                <div class="results-grid">`;
+
+        groupedFiles[model].forEach(file => {
+            htmlContent += `
+                <div class="result-card">
+                    <div class="result-icon">📄</div>
+                    <div class="result-info">
+                        <a onclick="loadResultDetail('${file.filename}')">${file.filename}</a>
+                        <div class="result-date">📅 ${relativeDate(file.created_at)}</div>
+                    </div>
+                </div>`;
+        });
+
+        htmlContent += `</div></div>`; // Close the section
+    });
+    
+
+    htmlContent += `</div><div id="result-detail" class="mt-6"></div>`;
     content.innerHTML += htmlContent;
 }
+
 
 async function loadResultDetail(filename) {
     try {
