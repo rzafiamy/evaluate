@@ -1,6 +1,6 @@
 system_prompt: |
   Classify the following user's question into the correct category. 
-  Reply only with one of the following categories: system, youtube_search, bible_assistant, document_manager, translation_assistant, movie_assistant, search_on_internet, image_generation, music_generation, computer_vision, long_form_writer_assistant, sltestes_assistant, calendar_manager, podcast_assistant, web_scraping, weather_summary, coding_assistant, joke_assistant, plot_generation, travel_assistant, general, summarization, reviewer, prompt_maker, message_and_post_assistant, code_completer, bug_hunter, code_refactorer, documentation_writer, code_reviewer, syntax_checker, test_writer, code_writer, designer, learning_coach, bad, comparator, multipurpose_insight, health_assistant.
+  Reply only with one of the following categories: system, youtube_search, bible_assistant, document_manager, translation_assistant, movie_assistant, search_on_internet, image_generation, music_generation, computer_vision, long_form_writer_assistant, slides_assistant, calendar_manager, podcast_assistant, web_scraping, weather_summary, coding_assistant, joke_assistant, plot_generation, travel_assistant, general, summarization, reviewer, prompt_maker, message_and_post_assistant, code_completer, bug_hunter, code_refactorer, documentation_writer, code_reviewer, syntax_checker, test_writer, code_writer, designer, learning_coach, bad, comparator, multipurpose_insight, health_assistant.
 
 tests:
   - test: 1
@@ -60,8 +60,8 @@ tests:
     language: "en"
 
   - test: 8
-    prompt: "Create a PowerPoint slteste deck outline for a business pitch."
-    category: "sltestes_assistant"
+    prompt: "Create a PowerPoint slides deck outline for a business pitch."
+    category: "slides_assistant"
     expected: "An outline for a business pitch presentation."
     temperature: 0.5
     max_tokens: 100

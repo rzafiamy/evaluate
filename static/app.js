@@ -169,6 +169,7 @@ async function startEvaluation(event) {
 }
 
 function updateTestStatus(update) {
+    console.log(update)
     const testElement = document.getElementById(`test-${update.test}`);
 
     if (!testElement) {
@@ -502,9 +503,12 @@ function renderResultDetail(data, filename) {
         <ul class="space-y-3">`;
 
     data.forEach(test => {
+        console.log(test)
         const statusClass = test.Success === "✅ Passed" ? "text-green-400" : "text-red-500";
         // convert test.Success to a boolean if it's a string
-        test.Success = test.Success === "True" || test.Success === "true" ? true : false;
+        if(typeof test.Success !== 'boolean'){
+            test.Success = test.Success === "True" || test.Success === "true" ? true : false;
+        }
 
         detailHtml += `
             <li class="mb-2 p-3 bg-blue-900 rounded shadow-lg" id="test-${test.Test}">
