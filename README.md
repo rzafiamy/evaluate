@@ -117,11 +117,11 @@ These images will be displayed within the GUI to facilitate analysis and decisio
 
 After running the evaluation, you'll find the results saved in the specified output folder as both CSV and HTML reports 📝. The individual test results will also be displayed on the screen in a table format using PrettyTable 🗒.
 
-![Dataset Preview](dataset_preview.png)
+![Dataset Preview](evaluate_llm.png)
 
 
 
-![Evaluation Result](results.png)
+![Evaluation Result](results_display.png)
 
 ## 💡 Best Practices
 

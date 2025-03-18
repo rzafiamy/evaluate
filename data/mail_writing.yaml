@@ -1,0 +1,228 @@
+system_prompt: |
+  You are an AI specialized in writing concise emails that include relevant information such as dates, times, lists, and essential details. Maintain a polite, professional tone and keep the content clear and brief.
+
+tests:
+  - test: 1
+    prompt: "Write a short email to invite Alice to a brief meeting tomorrow at 10:00 AM."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Brief Meeting Invitation
+
+      Hi Alice,
+
+      I hope you're doing well. I'd like to invite you to a brief meeting tomorrow at 10:00 AM to go over some project updates. Please let me know if you're available.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.3
+    max_tokens: 80
+    language: "en"
+
+  - test: 2
+    prompt: "Draft an email to the marketing team requesting a meeting next Wednesday at 2 PM, and include the top 3 discussion topics."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Marketing Team Meeting Request
+
+      Hello Marketing Team,
+
+      I’d like to schedule a meeting next Wednesday at 2:00 PM to discuss:
+      1. Upcoming campaign strategies
+      2. Social media metrics
+      3. Budget allocation
+      
+      Please let me know if this time works for everyone. Thank you!
+
+      Best regards,
+      [Your Name]
+    temperature: 0.4
+    max_tokens: 80
+    language: "en"
+
+  - test: 3
+    prompt: "Compose an email to your boss summarizing the key points from yesterday's project meeting, emphasizing the next steps."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Summary of Yesterday’s Project Meeting
+
+      Hello [Boss’s Name],
+
+      Here’s a quick summary of yesterday’s meeting:
+      • We reviewed the current project timeline and confirmed all major milestones.
+      • The design team will finalize the mockups by Friday.
+      • The testing phase will begin next Monday.
+
+      Next Steps:
+      • Coordinate with the QA team to prepare test cases.
+      • Schedule a follow-up meeting next week to review progress.
+
+      Please let me know if you need any additional details.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.4
+    max_tokens: 100
+    language: "en"
+
+  - test: 4
+    prompt: "Create an email to inform a client about a delivery delay, explaining the reason and providing a new expected delivery date."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Update on Your Order Delivery
+
+      Dear [Client Name],
+
+      I hope you’re well. I’m reaching out to let you know that there will be a slight delay in delivering your order. The shipment was held up due to a supplier issue, which has now been resolved.
+
+      We expect to deliver your order by next Tuesday, [Date]. We sincerely apologize for any inconvenience this may cause and appreciate your understanding.
+
+      Warm regards,
+      [Your Name]
+    temperature: 0.5
+    max_tokens: 100
+    language: "en"
+
+  - test: 5
+    prompt: "Write an email requesting a meeting with the legal department about a contract review, specifying possible dates and times."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Meeting Request for Contract Review
+
+      Hello [Legal Department Contact],
+
+      I would like to schedule a meeting to discuss the contract review. Could you please let me know if you’re available on either Wednesday at 10:00 AM or Thursday at 2:00 PM?
+
+      Thank you for your time, and I look forward to your response.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.4
+    max_tokens: 100
+    language: "en"
+
+  - test: 6
+    prompt: "Draft a short email welcoming a new team member, mentioning the date of the next orientation session and inviting questions."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Welcome to Our Team!
+
+      Hi [New Team Member Name],
+
+      Welcome aboard! We’re excited to have you on the team. Our next orientation session is scheduled for Friday, [Date], at 9:00 AM. 
+
+      If you have any questions before then, please feel free to reach out. We’re here to help you get settled in.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.3
+    max_tokens: 80
+    language: "en"
+
+  - test: 7
+    prompt: "Compose an email to your coworker detailing the steps for setting up a new software tool, including a list of required resources."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Steps for New Software Tool Setup
+
+      Hi [Coworker Name],
+
+      Here are the steps for setting up the new software:
+      1. Download and install the latest version from the official website.
+      2. Configure the application settings using the attached configuration file.
+      3. Grant necessary permissions in the admin panel.
+
+      Required Resources:
+      • License key (attached)
+      • User guide (link included)
+      • Access credentials from IT
+
+      Let me know if you need any assistance during the setup.
+
+      Regards,
+      [Your Name]
+    temperature: 0.5
+    max_tokens: 120
+    language: "en"
+
+  - test: 8
+    prompt: "Create an email to apologize to a customer for a billing error, stating when the correction will be applied and any compensation offered."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Apology for Billing Error
+
+      Dear [Customer Name],
+
+      I’m writing to apologize for the billing error on your recent invoice. We have corrected the issue, and the updated charge will take effect by [Date/Time]. As a gesture of goodwill, we’ve applied a small credit to your account.
+
+      Thank you for your understanding, and please let us know if there’s anything else we can do to assist you.
+
+      Sincerely,
+      [Your Name]
+    temperature: 0.5
+    max_tokens: 100
+    language: "en"
+
+  - test: 9
+    prompt: "Draft an email to your manager reporting on the progress of a complex project, listing major accomplishments, challenges, and next milestones."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Project Progress Update
+
+      Hello [Manager Name],
+
+      I’m writing to update you on our complex project. Here are the key points:
+
+      Accomplishments:
+      • Completed the initial design phase.
+      • Integrated the new API successfully.
+      • Met the first major deadline.
+
+      Challenges:
+      • Some performance bottlenecks in the testing environment.
+      • Delays in acquiring necessary hardware.
+
+      Next Milestones:
+      • Optimize performance for next release.
+      • Begin user acceptance testing by [Date].
+      • Prepare final documentation for review.
+
+      Please let me know if you have any questions or concerns.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.5
+    max_tokens: 120
+    language: "en"
+
+  - test: 10
+    prompt: "Write an email to finalize an event schedule for a corporate workshop, specifying the agenda, location, date, time, and additional resources needed."
+    category: "message_and_post_assistant"
+    expected: |
+      Subject: Finalizing Corporate Workshop Details
+
+      Hello Everyone,
+
+      I’m pleased to share the finalized schedule for our corporate workshop:
+
+      • Date: [Date]
+      • Time: [Time]
+      • Location: [Venue/Address]
+      • Agenda:
+        1. Opening Remarks
+        2. Keynote Presentation
+        3. Breakout Sessions
+        4. Group Discussion
+        5. Closing
+
+      Additional Resources Needed:
+      • Projector and speakers
+      • Whiteboards and markers
+      • Printed handouts (attached for reference)
+
+      If you have any questions or special requests, please let me know.
+
+      Best regards,
+      [Your Name]
+    temperature: 0.6
+    max_tokens: 120
+    language: "en"
