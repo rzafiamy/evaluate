@@ -135,11 +135,11 @@ class Evaluator:
                 writer.writerow(result)
 
 
-    def generate_html_report(self, template_path, html_file):
+    def generate_html_report(self, template_path, model, html_file):
         """Generate an HTML report using a template file."""
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template(template_path)
-        html_content = template.render(results=self.results)
+        html_content = template.render(data={'system_message': self.system, 'model':model, 'results': self.results})
         with open(html_file, 'w', encoding='utf-8') as file:
             file.write(html_content)
 
@@ -249,7 +249,7 @@ class Evaluator:
 
         # Generate final reports
         self.generate_csv_report(os.path.join(self.output_folder, csv_file))
-        self.generate_html_report(template_path, os.path.join(self.output_folder, html_file))
+        self.generate_html_report(template_path, m, os.path.join(self.output_folder, html_file))
 
         yield json.dumps({"status": "completed", "message": "Evaluation finished!"})
 
@@ -298,7 +298,7 @@ class Evaluator:
         
         # Generate CSV and HTML reports
         self.generate_csv_report(os.path.join(self.output_folder, csv_file))
-        self.generate_html_report(template_path, os.path.join(self.output_folder, html_file))
+        self.generate_html_report(template_path, m, os.path.join(self.output_folder, html_file))
 
     def format_response(self, provider, response):
         """

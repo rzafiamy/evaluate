@@ -286,13 +286,27 @@ async function previewDataset(event) {
 
 
 function renderDatasetPreview(data) {
-    console.log(data);
     const datasetName = localStorage.getItem("lastDatasetName");
-    
-    const container = document.getElementById('preview-container');
-    let htmlContent = `<h3 class="font-bold mb-2">📋 Test Cases : ${datasetName}</h3><ul class="space-y-3">`;
+    const datasets = data['tests'];
 
-    data.forEach(test => {
+    const container = document.getElementById('preview-container');
+    
+    let htmlContent = `
+        <!-- Beautified System Prompt -->
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 rounded shadow mb-6">
+            <div class="flex items-center gap-2 mb-2">
+                <h3 class="font-bold text-lg">⚙️ System Prompt</h3>
+            </div>
+            <p class="text-sm leading-relaxed">
+                ${data['system_prompt'].replace(/\n/g, '<br>')}
+            </p>
+        </div>
+
+        <!-- Test Case Header -->
+        <h3 class="font-bold mt-3 mb-4 text-xl text-white">📋 Test Cases : ${datasetName}</h3>
+        <ul class="space-y-3">`;
+
+    datasets.forEach(test => {
         htmlContent += `
             <li class="mb-2 p-3 bg-blue-900 rounded shadow-lg" id="test-${test.test}">
                 <details class="group">
@@ -312,6 +326,7 @@ function renderDatasetPreview(data) {
     htmlContent += '</ul>';
     container.innerHTML = htmlContent;
 }
+
 
 // Function to render selected plot dynamically
 // Function to render selected plot dynamically and save to localStorage

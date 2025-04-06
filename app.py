@@ -50,9 +50,9 @@ def load_dataset():
         with open(file_path, 'r', encoding='utf-8') as file:
             dataset_content = yaml.safe_load(file)
 
-        tests = dataset_content['tests']
+        #tests = dataset_content['tests']
         
-        return jsonify(tests)  # Return JSON format
+        return jsonify(dataset_content)  # Return JSON format
 
     except yaml.YAMLError as e:
         return jsonify({"error": f"Invalid YAML format: {str(e)}"}), 400

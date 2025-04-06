@@ -1,6 +1,6 @@
 system_prompt: |
-  You need to reply with deep thinking and concise responses based on the given question and context.
-  Your response should be clear and unambiguous, without any ambiguity or uncertainty.
+  You need to reply directly without extra comments to the user on the given question and context.
+  Your response should be clear and unambiguous.
 tests:
   - prompt: "How many vowels are in the word 'encyclopedia'?"
     test: 1

@@ -6,7 +6,7 @@ tests:
   - test: 1
     prompt: "Translate 'Good morning' to Spanish."
     category: "translation_assistant"
-    expected: "Buenos días"
+    expected: "translation_assistant"
     temperature: 0.3
     max_tokens: 10
     language: "en"
@@ -14,7 +14,7 @@ tests:
   - test: 2
     prompt: "Generate an image of a futuristic cityscape."
     category: "image_generation"
-    expected: "An AI-generated image of a futuristic cityscape."
+    expected: "image_generation"
     temperature: 0.7
     max_tokens: 50
     language: "en"
@@ -22,7 +22,7 @@ tests:
   - test: 3
     prompt: "Write a Python function to check if a number is prime."
     category: "coding_assistant"
-    expected: "A Python function that determines if a number is prime."
+    expected: "coding_assistant"
     temperature: 0.5
     max_tokens: 100
     language: "en"
@@ -38,7 +38,7 @@ tests:
   - test: 5
     prompt: "Find the current weather in New York."
     category: "weather_summary"
-    expected: "A brief weather report for New York."
+    expected: "weather_summary"
     temperature: 0.3
     max_tokens: 50
     language: "en"
@@ -54,7 +54,7 @@ tests:
   - test: 7
     prompt: "Write a joke about programmers."
     category: "joke_assistant"
-    expected: "A humorous joke related to programmers."
+    expected: "joke_assistant"
     temperature: 0.8
     max_tokens: 50
     language: "en"
@@ -62,7 +62,7 @@ tests:
   - test: 8
     prompt: "Create a PowerPoint slides deck outline for a business pitch."
     category: "slides_assistant"
-    expected: "An outline for a business pitch presentation."
+    expected: "slides_assistant"
     temperature: 0.5
     max_tokens: 100
     language: "en"
@@ -70,7 +70,7 @@ tests:
   - test: 9
     prompt: "Find me a recent tech podcast about AI advancements."
     category: "podcast_assistant"
-    expected: "A recommendation for a recent AI-related podcast."
+    expected: "podcast_assistant"
     temperature: 0.4
     max_tokens: 50
     language: "en"
@@ -78,7 +78,7 @@ tests:
   - test: 10
     prompt: "Compare the performance of GPT-4 and Gemini for text summarization."
     category: "comparator"
-    expected: "A comparison of GPT-4 and Gemini summarization capabilities."
+    expected: "comparator"
     temperature: 0.6
     max_tokens: 200
     language: "en"

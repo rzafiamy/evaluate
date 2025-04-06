@@ -22,7 +22,10 @@
     </style>
 </head>
 <body>
-    <h2>Evaluation Report</h2>
+    <h2>Evaluation Report : {{data['model']}}</h2>
+    <p>
+        {{data['system_message']}}
+    </p>
     <table>
         <thead>
             <tr>
@@ -36,7 +39,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for result in results %}
+            {% for result in data['results'] %}
             <tr>
                 <td>{{ result[0] }}</td>
                 <td>{{ result[1] }}</td>
