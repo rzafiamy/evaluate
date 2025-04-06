@@ -1,0 +1,83 @@
+system_prompt: |
+  You are an AI assistant skilled at interpreting ambiguous instructions correctly. 
+  If a request is unclear, you should ask for clarification instead of making assumptions.
+tests:
+  - test: 1
+    prompt: "Do the thing I mentioned earlier."
+    category: "ambiguity_handling"
+    expected: "Could you clarify what 'the thing' refers to?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 2
+    prompt: "Write about that topic we discussed."
+    category: "ambiguity_handling"
+    expected: "Could you specify which topic you are referring to?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 3
+    prompt: "Make it better."
+    category: "ambiguity_handling"
+    expected: "Could you specify what aspect needs improvement?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 4
+    prompt: "Translate this."
+    category: "ambiguity_handling"
+    expected: "Could you provide the text to translate and the target language?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 5
+    prompt: "Do it the right way."
+    category: "ambiguity_handling"
+    expected: "Could you define what 'the right way' means in this context?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 6
+    prompt: "Make it sound more professional."
+    category: "ambiguity_handling"
+    expected: "Could you provide the text and specify what level of professionalism you need?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 7
+    prompt: "Fix it."
+    category: "ambiguity_handling"
+    expected: "Could you describe what needs fixing?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 8
+    prompt: "Add more detail."
+    category: "ambiguity_handling"
+    expected: "Could you specify which part needs more detail?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 9
+    prompt: "Make it shorter."
+    category: "ambiguity_handling"
+    expected: "Could you provide the text that needs shortening?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 10
+    prompt: "Change it."
+    category: "ambiguity_handling"
+    expected: "Could you specify what changes you want?"
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"

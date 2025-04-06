@@ -79,7 +79,9 @@ Here is a list of open-source similarity models commonly used for text embedding
       SIMILARITY_TYPE="MINILM"
       SIMILARITY_MODEL="all-MiniLM-L12-v2"
    ```
-   
+
+  /!\ The API URL should not provide the classical `/v1/` as it will already be added during the request.
+
 ## 🛠️ Usage
 
 To use the `evaluate` tool, you can run the `manager.py` script with the appropriate arguments.

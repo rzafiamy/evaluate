@@ -1,0 +1,83 @@
+system_prompt: |
+  You are an AI assistant skilled at solving complex Linux administration problems. 
+  Provide well-reasoned, detailed explanations and solutions for Linux-related challenges.
+tests:
+  - test: 1
+    prompt: "Why does my Linux server keep running out of memory even though I closed all applications?"
+    category: "linux_admin_reasoning"
+    expected: "Your server may have memory leaks from background processes, high swap usage, or cached memory not being freed. Use 'free -m' and 'top' to diagnose the issue. Check 'ps aux --sort=-%mem' to find memory-hogging processes. If the issue persists, consider adjusting swappiness and investigating potential memory leaks in applications."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 2
+    prompt: "Why does my cron job not execute at the scheduled time?"
+    category: "linux_admin_reasoning"
+    expected: "Your cron job may be failing due to incorrect syntax, missing execution permissions, an incorrect environment, or an issue with the user's crontab settings. Check 'crontab -l' for the correct schedule format, ensure the script has execute permissions, and review logs using 'grep CRON /var/log/syslog' to diagnose failures."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 3
+    prompt: "Why is my Linux server booting into emergency mode?"
+    category: "linux_admin_reasoning"
+    expected: "Your system may be booting into emergency mode due to a corrupt filesystem, missing boot loader configurations, or hardware failures. Check 'journalctl -xb' for boot logs, run 'fsck' to repair disk issues, and ensure your fstab entries are correct. If the issue persists, boot into recovery mode and attempt manual repairs."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 4
+    prompt: "Why is my SSH connection frequently disconnecting?"
+    category: "linux_admin_reasoning"
+    expected: "Frequent SSH disconnections may be caused by network instability, timeout settings, or server-side configurations. Check your network connectivity, increase 'ClientAliveInterval' in '/etc/ssh/sshd_config', and ensure firewall rules aren't interfering. Running 'ping' or 'mtr' can help diagnose connectivity issues."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 5
+    prompt: "Why is my disk usage still high after deleting large files?"
+    category: "linux_admin_reasoning"
+    expected: "Deleted files may still be in use by active processes, preventing disk space reclamation. Use 'lsof | grep deleted' to identify such files and restart the processes holding them open. Also, check for hidden trash directories and unmounted partitions that may still contain data."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 6
+    prompt: "Why can't my Linux server resolve domain names?"
+    category: "linux_admin_reasoning"
+    expected: "Your DNS resolution may be failing due to incorrect 'resolv.conf' settings, network issues, or a blocked DNS service. Try 'nslookup example.com' or 'dig example.com' to check resolution. Ensure your system is using a functional DNS server like 8.8.8.8 and verify network connectivity with 'ping 8.8.8.8'."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 7
+    prompt: "Why is my process running but not responding to input?"
+    category: "linux_admin_reasoning"
+    expected: "The process may be in a deadlock state, waiting for I/O, or stuck due to resource exhaustion. Use 'strace -p <PID>' to check system calls, 'lsof -p <PID>' to check open files, and 'kill -SIGCONT <PID>' if it was paused. If necessary, restart the process."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 8
+    prompt: "Why is my Linux server rejecting SSH connections?"
+    category: "linux_admin_reasoning"
+    expected: "Your SSH server may be rejecting connections due to firewall rules, incorrect SSH daemon configurations, or missing user permissions. Check 'systemctl status ssh', ensure port 22 is open using 'netstat -tulnp', and confirm firewall rules allow SSH traffic. Reviewing '/var/log/auth.log' may provide more details."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 9
+    prompt: "Why does my system show high load average but low CPU usage?"
+    category: "linux_admin_reasoning"
+    expected: "A high load average with low CPU usage indicates excessive disk I/O wait, slow network performance, or too many running processes in a waiting state. Use 'iostat', 'iotop', and 'vmstat' to diagnose disk bottlenecks, and check 'ps aux --sort=-%mem' to find problematic processes."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 10
+    prompt: "Why is my Linux server running out of file descriptors?"
+    category: "linux_admin_reasoning"
+    expected: "Your server may be running out of file descriptors due to too many open files or processes exceeding limits. Use 'ulimit -n' to check limits, 'lsof | wc -l' to see open files, and adjust '/etc/security/limits.conf' if needed. Restarting affected services can temporarily resolve the issue."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"

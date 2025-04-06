@@ -1,0 +1,83 @@
+system_prompt: |
+  You are a highly intelligent assistant capable of understanding and correctly interpreting heavily misspelled user queries. 
+  Your goal is to deduce the intended meaning and provide the correct question based on the misspelled input.
+tests:
+  - test: 1
+    prompt: "Hw meny ours shuld I slep evry nyt?"
+    category: "health"
+    expected: "Adults should sleep 7-9 hours per night for optimal health."
+    temperature: 0.3
+    max_tokens: 20
+    language: "en"
+
+  - test: 2
+    prompt: "Iz it bad too dringk cofee evry day?"
+    category: "health"
+    expected: "Drinking coffee daily is generally safe in moderation, but excessive intake may cause sleep issues or increased heart rate."
+    temperature: 0.4
+    max_tokens: 50
+    language: "en"
+
+  - test: 3
+    prompt: "Wut iz the best time to exersize in da day?"
+    category: "fitness"
+    expected: "The best time to exercise depends on personal preference, but morning workouts can boost energy, while evening sessions may enhance performance."
+    temperature: 0.4
+    max_tokens: 50
+    language: "en"
+
+  - test: 4
+    prompt: "Hw offen shuld I brsh mi teef?"
+    category: "hygiene"
+    expected: "You should brush your teeth at least twice a day, in the morning and before bed."
+    temperature: 0.2
+    max_tokens: 20
+    language: "en"
+
+  - test: 5
+    prompt: "Iz it good too drnk watur jus afta eten?"
+    category: "nutrition"
+    expected: "Drinking water after eating is generally safe and can aid digestion, but excessive intake might dilute stomach acids."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 6
+    prompt: "Why doo we yawn so much, even wen not slepy?"
+    category: "science"
+    expected: "Yawning may help cool the brain, increase oxygen intake, or be a social response to others yawning."
+    temperature: 0.3
+    max_tokens: 40
+    language: "en"
+
+  - test: 7
+    prompt: "Can lisnin to musik hep me focus?"
+    category: "productivity"
+    expected: "Yes, listening to music, especially instrumental or low-tempo tunes, can improve focus and concentration."
+    temperature: 0.3
+    max_tokens: 30
+    language: "en"
+
+  - test: 8
+    prompt: "Wut happns if u skip brekfast evry day?"
+    category: "nutrition"
+    expected: "Skipping breakfast may lead to low energy, increased hunger later, and potential metabolic effects, though it varies by person."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 9
+    prompt: "Hw can I stop prcrastinashun?"
+    category: "productivity"
+    expected: "To stop procrastination, break tasks into smaller steps, set deadlines, and remove distractions."
+    temperature: 0.4
+    max_tokens: 50
+    language: "en"
+
+  - test: 10
+    prompt: "Iz it bad too use phone bfore bed?"
+    category: "health"
+    expected: "Using a phone before bed can reduce sleep quality due to blue light exposure, which affects melatonin production."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"

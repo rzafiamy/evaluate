@@ -1,0 +1,84 @@
+system_prompt: |
+  You are an AI assistant skilled at following multi-step instructions accurately. 
+  Execute each instruction in the given sequence without skipping any steps.
+  !important!: The length of your response should be no more than 50 words.
+tests:
+  - test: 1
+    prompt: "Write a short poem, translate it into French, summarize it in one sentence, make it rhyme, and then turn it into a haiku."
+    category: "multi-step_execution"
+    expected: "A short poem in English, its French translation, a one-sentence summary, a rhyming version, and a haiku based on the original."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 2
+    prompt: "List five animals, sort them alphabetically, describe each in one sentence, translate the descriptions into Spanish, and rank them by size."
+    category: "multi-step_execution"
+    expected: "A list of five animals, sorted alphabetically, with descriptions in English, translations in Spanish, and a ranking by size."
+    temperature: 0.5
+    max_tokens: 1500
+    language: "en"
+
+  - test: 3
+    prompt: "Generate a motivational quote, explain its meaning, provide an example scenario, rewrite it in Shakespearean style, and turn it into a tweet."
+    category: "multi-step_execution"
+    expected: "A motivational quote, an explanation, an example scenario, a Shakespearean rewrite, and a tweet-length version."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 4
+    prompt: "Create a short story, summarize it in three sentences, rewrite the summary in first-person perspective, change its genre to sci-fi, and give it a title."
+    category: "multi-step_execution"
+    expected: "A short story, a three-sentence summary, a first-person rewrite of the summary, a sci-fi version of the story, and a title."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 5
+    prompt: "Invent a new word, define it, use it in a sentence, create a synonym, and explain how it could be used in daily life."
+    category: "multi-step_execution"
+    expected: "A new word, its definition, a sentence using it, a synonym, and an explanation of its practical usage."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 6
+    prompt: "Write a five-line joke, explain why it is funny, translate it into German, simplify it for a child, and create a related riddle."
+    category: "multi-step_execution"
+    expected: "A five-line joke, an explanation, a German translation, a simplified version for children, and a related riddle."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 7
+    prompt: "Describe a historical event, list three key figures involved, explain its impact today, rewrite it as a news headline, and then as a tweet."
+    category: "multi-step_execution"
+    expected: "A historical event description, three key figures, its modern impact, a news headline, and a tweet."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 8
+    prompt: "Provide a recipe for a dessert, list alternative ingredients, explain how to make it healthier, suggest a beverage pairing, and describe its origin."
+    category: "multi-step_execution"
+    expected: "A dessert recipe, alternative ingredients, a health-conscious version, a beverage pairing, and its origin."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 9
+    prompt: "Create a fictional character, describe their personality, write a short dialogue, give them a conflict, and resolve it in a happy ending."
+    category: "multi-step_execution"
+    expected: "A fictional character description, personality traits, a short dialogue, a conflict, and a happy resolution."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"
+
+  - test: 10
+    prompt: "Summarize a famous book, rewrite it in a futuristic setting, create a new title, describe the main character in two sentences, and suggest a sequel idea."
+    category: "multi-step_execution"
+    expected: "A book summary, a futuristic adaptation, a new title, a character description, and a sequel idea."
+    temperature: 0.5
+    max_tokens: 500
+    language: "en"

@@ -1,0 +1,83 @@
+system_prompt: |
+  You are an AI assistant skilled at generating structured JSON data commonly needed in programming. 
+  Ensure the output follows correct JSON syntax and meets the requested format for real-world applications.
+tests:
+  - test: 1
+    prompt: "Generate a JSON object representing a user in a web application with id, username, email, and role."
+    category: "json_generation"
+    expected: '{"id": 1, "username": "devUser", "email": "dev@example.com", "role": "admin"}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 2
+    prompt: "Create a JSON array containing three HTTP status codes with their meanings."
+    category: "json_generation"
+    expected: '[{"code": 200, "meaning": "OK"}, {"code": 404, "meaning": "Not Found"}, {"code": 500, "meaning": "Internal Server Error"}]'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 3
+    prompt: "Generate a JSON object representing a database connection config with host, port, username, and password."
+    category: "json_generation"
+    expected: '{"host": "localhost", "port": 5432, "username": "admin", "password": "securePass"}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 4
+    prompt: "Create a JSON object for an API response containing a success status, message, and data array."
+    category: "json_generation"
+    expected: '{"success": true, "message": "Request completed", "data": []}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 5
+    prompt: "Generate a JSON object representing an e-commerce product with id, name, price, and availability status."
+    category: "json_generation"
+    expected: '{"id": 101, "name": "Wireless Mouse", "price": 25.99, "available": true}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 6
+    prompt: "Create a JSON object for a logging system entry with timestamp, level, message, and source."
+    category: "json_generation"
+    expected: '{"timestamp": "2025-03-18T12:00:00Z", "level": "error", "message": "Database connection failed", "source": "server.js"}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 7
+    prompt: "Generate a JSON object representing a chatbot response with user input, response text, and confidence score."
+    category: "json_generation"
+    expected: '{"user_input": "Hello!", "response": "Hi there!", "confidence": 0.95}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 8
+    prompt: "Create a JSON array of three programming languages with their popularity rank."
+    category: "json_generation"
+    expected: '[{"language": "JavaScript", "rank": 1}, {"language": "Python", "rank": 2}, {"language": "Java", "rank": 3}]'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 9
+    prompt: "Generate a JSON object representing a task in a to-do list with id, title, due date, and completed status."
+    category: "json_generation"
+    expected: '{"id": 42, "title": "Finish project report", "due_date": "2025-03-20", "completed": false}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 10
+    prompt: "Create a JSON object for an IoT device with device id, status, last updated timestamp, and battery level."
+    category: "json_generation"
+    expected: '{"device_id": "sensor-001", "status": "active", "last_updated": "2025-03-18T14:30:00Z", "battery_level": 85}'
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"

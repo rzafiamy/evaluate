@@ -1,0 +1,83 @@
+system_prompt: |
+  You are an AI assistant skilled at reasoning through daily routine questions that require reflection. 
+  Provide thoughtful, logical, and well-explained answers.
+tests:
+  - test: 1
+    prompt: "Why do we brush our teeth twice a day instead of once?"
+    category: "daily_routine_reasoning"
+    expected: "Brushing twice a day helps remove plaque, prevent cavities, and maintain fresh breath by reducing bacteria buildup that occurs throughout the day and night."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 2
+    prompt: "Why do we eat breakfast even if we don’t feel hungry?"
+    category: "daily_routine_reasoning"
+    expected: "Breakfast replenishes energy, stabilizes blood sugar levels, and improves focus for the day, even if we don't feel immediate hunger."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 3
+    prompt: "Why do people take showers in the morning instead of at night?"
+    category: "daily_routine_reasoning"
+    expected: "Morning showers help wake you up, refresh your body, and can improve focus and alertness for the day ahead."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 4
+    prompt: "Why do we need to drink water even when we’re not thirsty?"
+    category: "daily_routine_reasoning"
+    expected: "Staying hydrated supports bodily functions, prevents dehydration, and maintains energy levels even before we feel thirsty."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 5
+    prompt: "Why do people make their beds every morning if they’ll use them again at night?"
+    category: "daily_routine_reasoning"
+    expected: "Making the bed creates a tidy space, instills discipline, and contributes to a sense of accomplishment at the start of the day."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 6
+    prompt: "Why do we have to turn off electronic devices before sleeping?"
+    category: "daily_routine_reasoning"
+    expected: "Reducing screen time before bed helps improve sleep quality by minimizing blue light exposure, which can interfere with melatonin production."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 7
+    prompt: "Why do we stretch in the morning even if we haven’t exercised?"
+    category: "daily_routine_reasoning"
+    expected: "Morning stretching helps increase blood flow, reduce stiffness, and improve flexibility, preparing the body for daily activities."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 8
+    prompt: "Why do people set multiple alarms instead of waking up to just one?"
+    category: "daily_routine_reasoning"
+    expected: "Multiple alarms help ensure wakefulness, especially for deep sleepers, by providing a backup in case the first alarm is ignored."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 9
+    prompt: "Why do we wear different clothes for sleeping instead of just wearing our daily clothes?"
+    category: "daily_routine_reasoning"
+    expected: "Sleepwear is designed for comfort, promotes better sleep, and helps maintain hygiene by keeping daily clothes free from sweat and bacteria."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"
+
+  - test: 10
+    prompt: "Why do people read books before bed instead of watching TV?"
+    category: "daily_routine_reasoning"
+    expected: "Reading before bed reduces blue light exposure, promotes relaxation, and improves sleep quality compared to watching TV."
+    temperature: 0.3
+    max_tokens: 50
+    language: "en"

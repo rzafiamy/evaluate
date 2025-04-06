@@ -1,0 +1,156 @@
+system_prompt: |
+  You are a helpful assistant that provides step-by-step solutions based on the user's request.
+  For each problem or question, generate a logical plan with exactly 5 clear and concise steps.
+  Each step should be no more than 15 words. Return only the list of steps wrapped within [TASK] and [/TASK] tags, 
+  and respond in the same language as the user's request. Do not include any explanations or extra text.
+
+tests:
+  - test: 1
+    prompt: "Plan a birthday party for a 10-year-old child."
+    category: "event_planning"
+    expected: |
+      [TASK]
+      1- Choose a theme suitable for a 10-year-old.
+      2- Create a guest list with parents.
+      3- Book a venue or decorate home.
+      4- Plan food, drinks, and a cake.
+      5- Arrange games and fun activities.
+      [/TASK]
+    temperature: 0.4
+    max_tokens: 150
+    language: "en"
+
+  - test: 2
+    prompt: "Préparer une présentation pour une réunion d'équipe."
+    category: "work_organization"
+    expected: |
+      [TASK]
+      1- Identifier le sujet principal de la réunion.
+      2- Collecter les données et informations pertinentes.
+      3- Créer des diapositives claires et concises.
+      4- Prévoir un temps pour les questions.
+      5- Répéter la présentation à l'avance.
+      [/TASK]
+    temperature: 0.4
+    max_tokens: 150
+    language: "fr"
+
+  - test: 3
+    prompt: "How to study effectively for final exams?"
+    category: "education"
+    expected: |
+      [TASK]
+      1- Review the syllabus and exam format.
+      2- Create a realistic study schedule.
+      3- Take notes from key resources.
+      4- Test yourself with past questions.
+      5- Get enough rest before exams.
+      [/TASK]
+    temperature: 0.3
+    max_tokens: 150
+    language: "en"
+
+  - test: 4
+    prompt: "Organize your home workspace for better productivity."
+    category: "productivity"
+    expected: |
+      [TASK]
+      1- Declutter your desk and surroundings.
+      2- Set up good lighting and ventilation.
+      3- Arrange tools for easy access.
+      4- Add personal touches for comfort.
+      5- Limit distractions and digital noise.
+      [/TASK]
+    temperature: 0.3
+    max_tokens: 150
+    language: "en"
+
+  - test: 5
+    prompt: "Trouver un logement à louer dans une nouvelle ville."
+    category: "daily_life"
+    expected: |
+      [TASK]
+      1- Définir votre budget mensuel.
+      2- Identifier les quartiers préférés.
+      3- Consulter les annonces en ligne.
+      4- Visiter les logements disponibles.
+      5- Signer le contrat de location.
+      [/TASK]
+    temperature: 0.3
+    max_tokens: 150
+    language: "fr"
+
+  - test: 6
+    prompt: "Launch a new product in the market."
+    category: "business_strategy"
+    expected: |
+      [TASK]
+      1- Conduct market research and competitor analysis.
+      2- Define target audience and positioning.
+      3- Develop a marketing strategy.
+      4- Prepare production and logistics.
+      5- Launch with promotional campaign.
+      [/TASK]
+    temperature: 0.4
+    max_tokens: 150
+    language: "en"
+
+  - test: 7
+    prompt: "Préparer un voyage à Rome de 5 jours."
+    category: "travel_planning"
+    expected: |
+      [TASK]
+      1- Réserver les billets d'avion et l’hébergement.
+      2- Créer un itinéraire quotidien.
+      3- Acheter des billets pour les attractions.
+      4- Préparer les documents nécessaires.
+      5- Faire les valises selon la météo.
+      [/TASK]
+    temperature: 0.3
+    max_tokens: 150
+    language: "fr"
+
+  - test: 8
+    prompt: "Improve your LinkedIn profile for job hunting."
+    category: "career_development"
+    expected: |
+      [TASK]
+      1- Update your headline and summary.
+      2- Add relevant work experience.
+      3- Request recommendations from colleagues.
+      4- Share articles to boost visibility.
+      5- Apply to matching job postings.
+      [/TASK]
+    temperature: 0.4
+    max_tokens: 150
+    language: "en"
+
+  - test: 9
+    prompt: "Créer un budget mensuel personnel."
+    category: "finance"
+    expected: |
+      [TASK]
+      1- Lister vos revenus mensuels.
+      2- Identifier toutes vos dépenses fixes.
+      3- Calculer les dépenses variables.
+      4- Définir une épargne mensuelle.
+      5- Ajuster les dépenses si nécessaire.
+      [/TASK]
+    temperature: 0.3
+    max_tokens: 150
+    language: "fr"
+
+  - test: 10
+    prompt: "How to prepare for a software engineering interview?"
+    category: "job_preparation"
+    expected: |
+      [TASK]
+      1- Review common data structure and algorithm problems.
+      2- Practice mock interviews regularly.
+      3- Study system design concepts.
+      4- Research the company background.
+      5- Prepare personal project explanations.
+      [/TASK]
+    temperature: 0.4
+    max_tokens: 150
+    language: "en"

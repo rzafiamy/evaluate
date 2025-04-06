@@ -1,0 +1,83 @@
+system_prompt: |
+  You are an AI assistant skilled at interpreting ambiguous questions and providing well-reasoned responses. 
+  If necessary, infer missing details before answering accurately.
+tests:
+  - test: 1
+    prompt: "What was the official language of the country where the tallest mountain is located, during the year when the country won its first Olympic gold medal?"
+    category: "multi-step_ambiguity"
+    expected: "1. The tallest mountain is Mount Everest.\n2. Mount Everest is in Nepal.\n3. Nepal won its first Olympic gold medal in 1984.\n4. The official language of Nepal in 1984 was Nepali.\nFinal answer: Nepali."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 2
+    prompt: "Who was the president of the country that borders the nation where the Eiffel Tower is located, at the time when the Mars Rover Curiosity landed?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Eiffel Tower is in France.\n2. France shares a border with Germany.\n3. The Mars Rover Curiosity landed in 2012.\n4. The president of Germany in 2012 was Joachim Gauck.\nFinal answer: Joachim Gauck."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 3
+    prompt: "Which currency was used in the country where the Amazon Rainforest is located, in the year when humans first landed on the moon?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Amazon Rainforest is in Brazil.\n2. Humans first landed on the moon in 1969.\n3. The currency of Brazil in 1969 was the Brazilian Cruzeiro.\nFinal answer: Brazilian Cruzeiro."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 4
+    prompt: "What was the most spoken language in the country where the Great Wall is located, at the time when the first modern Olympic Games were held?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Great Wall is in China.\n2. The first modern Olympic Games were held in 1896.\n3. The most spoken language in China in 1896 was Mandarin Chinese.\nFinal answer: Mandarin Chinese."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 5
+    prompt: "Who was the leader of the country where the Sydney Opera House is located, during the year when the Berlin Wall fell?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Sydney Opera House is in Australia.\n2. The Berlin Wall fell in 1989.\n3. The leader of Australia in 1989 was Prime Minister Bob Hawke.\nFinal answer: Bob Hawke."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 6
+    prompt: "Which company was the largest tech firm in the country where the Colosseum is located, at the time when the iPhone was first released?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Colosseum is in Italy.\n2. The first iPhone was released in 2007.\n3. The largest tech firm in Italy in 2007 was Telecom Italia.\nFinal answer: Telecom Italia."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 7
+    prompt: "What was the dominant religion in the country where Machu Picchu is located, in the year when it was declared a UNESCO World Heritage Site?"
+    category: "multi-step_ambiguity"
+    expected: "1. Machu Picchu is in Peru.\n2. It was declared a UNESCO World Heritage Site in 1983.\n3. The dominant religion in Peru in 1983 was Christianity (Catholicism).\nFinal answer: Catholicism."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 8
+    prompt: "Who was the prime minister of the country where Buckingham Palace is located, in the year the first modern Olympics were held?"
+    category: "multi-step_ambiguity"
+    expected: "1. Buckingham Palace is in the United Kingdom.\n2. The first modern Olympics were held in 1896.\n3. The Prime Minister of the UK in 1896 was Lord Salisbury.\nFinal answer: Lord Salisbury."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 9
+    prompt: "Which car brand was the most popular in the country where the Statue of Liberty is located, at the time when the internet was first made public?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Statue of Liberty is in the United States.\n2. The internet was first made public in 1991.\n3. The most popular car brand in the U.S. in 1991 was Ford.\nFinal answer: Ford."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
+
+  - test: 10
+    prompt: "What was the primary export of the country where the Kremlin is located, at the time of the Chernobyl disaster?"
+    category: "multi-step_ambiguity"
+    expected: "1. The Kremlin is in Russia (formerly the Soviet Union).\n2. The Chernobyl disaster happened in 1986.\n3. The primary export of the Soviet Union in 1986 was oil.\nFinal answer: Oil."
+    temperature: 0.5
+    max_tokens: 200
+    language: "en"
