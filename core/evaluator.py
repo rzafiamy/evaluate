@@ -61,9 +61,12 @@ class Evaluator:
         if self.config.api_key:
             headers['Authorization'] = f'Bearer {self.config.api_key}'
         
+        suffix = "v1/chat/completions"
+        
+
         if provider == "openai":
             system = self.system+'\n\n'+self.config.SYSTEM_PROMPT if self.system else self.config.SYSTEM_PROMPT
-
+            
             data = {
                 'model': model,
                 'messages': [{'role':'system', 'content': system},{'role': 'user', 'content': prompt}],
@@ -73,6 +76,8 @@ class Evaluator:
                 data.update(options)  # Add additional OpenAI-specific options
         
         elif provider == "ollama":
+            suffix = "api/generate"
+
             data = {
                 'prompt': prompt,
                 'model': model,
@@ -85,7 +90,7 @@ class Evaluator:
             return None
         
         try:
-            response = requests.post(f"{self.config.api_url}/v1/chat/completions", json=data, headers=headers)
+            response = requests.post(f"{self.config.api_url}/{suffix}", json=data, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
